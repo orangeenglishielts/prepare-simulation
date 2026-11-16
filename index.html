@@ -152,6 +152,7 @@ details.card[open]>summary{margin-bottom:.6rem}
 .prep .pn{font-weight:700;font-size:.8rem}
 .prep .pt{font-size:.68rem;color:var(--muted);line-height:1.2}
 .prep .lvl{font-size:.68rem}
+.terms{margin-top:.8rem;border:1px solid var(--line);border-radius:8px;padding:.5rem .7rem;background:#fff}.terms summary{cursor:pointer;font-weight:700;color:var(--teal)}.terms dt{font-weight:700;margin-top:.4rem}.terms dd{margin:0 0 .2rem}
 /* stage chips */
 .stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
 .st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
@@ -196,6 +197,7 @@ details.card[open]>summary{margin-bottom:.6rem}
    <tr><td>Avg discount (won deals)</td><td>6%</td><td>9%</td><td>13%</td><td>8%</td><td>≤10%</td></tr>
   </tbody></table>
   <p class="pnote">Team averages Q1 → Q3: close rate 31% → 29% → 27% · financing approval 84% → 80% → 76%.<br>Note: new financing partner from the start of Q2.</p>
+  <p class="pnote"><strong>Terms:</strong> Close rate = proposals that become a sale. Financing approval = clinic finance applications approved. Avg discount = price reduction on won deals.</p>
   <div class="pfoot">Page 1 of 1 · Confidential</div>
  </div>
  <button class="btn" id="kfClose">Close</button>
@@ -250,7 +252,13 @@ const FILES={
  <tr><td>Close rate</td><td class="num">33%</td><td class="num">25%</td><td class="num">17%</td><td class="num">27%</td><td class="num">30%</td></tr>
  <tr><td>Financing approval rate</td><td class="num">80%</td><td class="num">62%</td><td class="num">40%</td><td class="num">76%</td><td class="num">–</td></tr>
  <tr><td>Average discount (won deals)</td><td class="num">6%</td><td class="num">9%</td><td class="num">13%</td><td class="num">8%</td><td class="num">≤10%</td></tr>
- </tbody></table><p class="hint">Note: new financing partner from the start of Q2.</p>`},
+ </tbody></table><p class="hint">Note: new financing partner from the start of Q2.</p><details class="terms"><summary>What do these terms mean?</summary><dl>
+ <dt>Quota attainment</dt><dd>Sales achieved as a percentage of the sales target.</dd>
+ <dt>Demonstration</dt><dd>A visit where the rep shows a clinic the equipment.</dd>
+ <dt>Proposal</dt><dd>A written quote sent to a clinic after a demonstration.</dd>
+ <dt>Close rate</dt><dd>The percentage of proposals that become a sale.</dd>
+ <dt>Financing approval rate</dt><dd>The percentage of clinics whose finance application is approved. Most clinics buy through third-party financing.</dd>
+ <dt>Average discount</dt><dd>The average price reduction given on deals that were won.</dd></dl></details>`},
  team:{t:"Team dashboard",h:`<h3>North team averages (8 representatives)</h3>
  <table><thead><tr><th>Measure</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th></tr></thead><tbody>
  <tr><td>Close rate</td><td class="num">31%</td><td class="num">29%</td><td class="num">27%</td></tr>
@@ -270,9 +278,11 @@ const FILES={
  email:{t:"Colleague email",h:`<div class="email"><p><strong>From:</strong> Sam (North region)<br><strong>To:</strong> You<br><strong>Subject:</strong> Quick heads-up</p>
  <p>Hi, just thought you should know Jordan seems disengaged lately. Not really joining in on team calls. Might be worth a chat. Sam</p></div>`},
  policy:{t:"Policy extract",h:`<h3>Performance management policy (extract)</h3><ol>
- <li>Managers address performance concerns informally first, through a documented performance conversation and support plan.</li>
- <li>A formal Performance Improvement Plan (PIP) is used only where there is no sufficient improvement after a reasonable review period with agreed support.</li>
+ <li>Managers should normally address performance concerns informally first, in a private performance conversation.</li>
+ <li>The employee should be shown the relevant evidence and given a genuine opportunity to respond.</li>
+ <li>Expectations, agreed actions, manager support and review arrangements should be documented.</li>
  <li>Seek HR guidance, in line with organisational policy, where health, disability, caring responsibilities, workplace adjustments, leave or formal action may be relevant.</li>
+ <li>A formal Performance Improvement Plan (PIP) should not begin automatically after one conversation. Formal escalation requires evidence that expectations were clear, support was provided and reasonable time was allowed for improvement.</li>
  <li>Managers may not change targets, territories, pay or leave entitlements without approval.</li></ol>`},
  jobaid:{t:"PREPARE job aid",h:""},
  planner:{t:"My planner",h:""}
