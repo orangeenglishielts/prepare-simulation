@@ -143,6 +143,15 @@ details.card[open]>summary{margin-bottom:.6rem}
 .cmp2 h4{margin:0 0 .3rem;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .cmp2 .modelans{background:var(--teal-l);border-color:#d8cdea}
 .sc legend{font-size:1.02rem}.scres{margin:.4rem 0 0;font-size:.9rem}
+.prep{list-style:none;padding:0;margin:.6rem 0;display:grid;grid-template-columns:repeat(7,1fr);gap:.35rem}
+@media (max-width:760px){.prep{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:420px){.prep{grid-template-columns:repeat(2,1fr)}}
+.prep li{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:8px;padding:.45rem .4rem;text-align:center;display:flex;flex-direction:column;gap:.15rem;align-items:center}
+.prep li.plan{border-top-color:var(--rose);background:#fffafb}
+.prep .pl{font-family:"DM Serif Display",Georgia,serif;font-size:1.6rem;line-height:1;color:var(--navy)}
+.prep .pn{font-weight:700;font-size:.8rem}
+.prep .pt{font-size:.68rem;color:var(--muted);line-height:1.2}
+.prep .lvl{font-size:.68rem}
 /* stage chips */
 .stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
 .st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
@@ -265,6 +274,7 @@ const FILES={
  <li>A formal Performance Improvement Plan (PIP) is used only where there is no sufficient improvement after a reasonable review period with agreed support.</li>
  <li>Seek HR guidance, in line with organisational policy, where health, disability, caring responsibilities, workplace adjustments, leave or formal action may be relevant.</li>
  <li>Managers may not change targets, territories, pay or leave entitlements without approval.</li></ol>`},
+ jobaid:{t:"PREPARE job aid",h:""},
  planner:{t:"My planner",h:""}
 };
 
@@ -373,6 +383,16 @@ function playLine(t,keep,btn){if(!keep)queue=[];const src=srcFor(t);if(!src)retu
   try{player.pause();player.src=src;player.load();const p=player.play();setBtn(btn||null);
     if(p&&p.catch)p.catch(err=>{setBtn(null);if(btn){btn.textContent="Audio blocked";setTimeout(()=>{btn.textContent="▶ Play"},2500)}console.warn("audio",err)})}catch(e){console.warn(e)}}
 
+/* ============ PREPARE ============ */
+const PREP=[["P","Pinpoint","target","What exactly is the gap? Standard, evidence, trend.","Verified gap statement","do"],
+ ["R","Receive","ear","What is Jordan's perspective? Evidence first, then ask and listen.","Employee perspective record","do"],
+ ["E","Examine","search","What is causing it? Ability, motivation, opportunity: test each against evidence.","Performance cause map","do"],
+ ["P","Plan","plan","What will change? Actions matched to causes, SMART, with your support.","Recovery plan","do"],
+ ["A","Act","bulb","How will you coach and support? Observe, practise, give feedback, remove barriers.","Coaching and support record","plan"],
+ ["R","Review","cycle","Is it working? Leading and lagging measures at agreed check-ins.","Progress review","plan"],
+ ["E","Escalate","flag","Only when warranted: fair notice, fair hearing, evidence. Check policy and HR.","Escalation decision","plan"]];
+function prepStrip(levels){return `<ol class="prep" aria-label="PREPARE framework">${PREP.map((p,i)=>`<li class="${p[5]}"><span class="pl">${p[0]}</span><span class="pn">${p[1]}</span>${levels?`<span class="lvl ${levels[i]}">${LV[levels[i]]}</span>`:`<span class="pt">${p[5]==="do"?"You'll do this today":"You'll plan this"}</span>`}</li>`).join("")}</ol>`}
+
 /* ============ DEMO MODE ============ */
 let DEMO=location.hash==="#demo";
 function demoFill(stage){
@@ -402,7 +422,7 @@ function progress(){
   $("#stepnow").textContent=`Step ${S.stage+1} of ${STAGES.length}: ${STAGES[S.stage]}`;
   $("#progress").innerHTML=STAGES.map((s,i)=>`<li class="${i<S.stage?'done':i===S.stage?'now':''}" ${i===S.stage?'aria-current="step"':''}>${s}</li>`).join("");
 }
-const CHIP={P:["st-P","Pinpoint","target"],R:["st-R","Receive","ear"],E:["st-E","Examine","search"],PL:["st-PL","Plan","plan"],RE:["st-RE","Review · Escalate","cycle"]};
+const CHIP={PA:["st-PL","Plan · Act","plan"],P:["st-P","Pinpoint","target"],R:["st-R","Receive","ear"],E:["st-E","Examine","search"],PL:["st-PL","Plan","plan"],RE:["st-RE","Review · Escalate","cycle"]};
 function chip(k){const c=CHIP[k];return `<span class="stagechip ${c[0]}">${icon(c[2],14)} PREPARE · ${c[1]}</span>`}
 function syncKF(){}
 function syncSnd(){$("#sndBtn").textContent=soundOn?"Sound on":"Sound off";$("#sndBtn").setAttribute("aria-pressed",String(soundOn))}
@@ -420,9 +440,10 @@ function go(n){S.stage=n;progress();syncKF();render();save();main.focus();window
 /* ============ FILES DRAWER ============ */
 let curFile="scorecard";
 function renderFiles(){
-  const FI={scorecard:"chart",team:"team",crm:"notes",review:"star",email:"mail",policy:"policy",planner:"plan"};
+  const FI={scorecard:"chart",team:"team",crm:"notes",review:"star",email:"mail",policy:"policy",jobaid:"bulb",planner:"plan"};
   $("#fileTabs").innerHTML=Object.entries(FILES).map(([k,f])=>`<button role="tab" aria-selected="${k===curFile}" data-f="${k}">${icon(FI[k],16)} ${f.t}</button>`).join("");
   let h=FILES[curFile].h;
+  if(curFile==="jobaid"){h=`<h3>PREPARE: one-page job aid</h3><p class="hint">Manager-led, pre-PIP performance recovery.</p><table><thead><tr><th>Stage</th><th>Key question</th><th>Output</th></tr></thead><tbody>${PREP.map(p=>`<tr><td><strong>${p[0]}</strong> · ${p[1]}</td><td>${p[3]}</td><td>${p[4]}</td></tr>`).join("")}</tbody></table><p class="hint" style="margin-top:.8rem">Fairness check before you finish: Was the standard clear? Was the employee heard? Is every decision based on evidence?</p>`}
   if(curFile==="planner"){
     const p=S.plan;
     h=p.gap?`<h3>My conversation planner</h3><p><strong>Gap:</strong> ${esc(p.gap)}</p><p><strong>Evidence:</strong> ${esc(p.evidence)}</p><p><strong>Opening:</strong> ${esc(p.opening)}</p><p><strong>Questions:</strong> ${esc(p.questions)}</p><p><strong>Possible causes:</strong> ${esc(p.causes)}</p><p><strong>Support:</strong> ${esc(p.support)}</p>`:`<p class="muted">You haven't completed the planner yet.</p>`;
@@ -464,6 +485,9 @@ function brief(){
   <div class="card"><p><strong>Your role.</strong> You are the new regional sales manager at Lumera Aesthetics. You joined from another region three months ago and manage eight sales representatives.</p>
   <p><strong>The situation.</strong> Jordan Lee has been with Lumera for three years and has a strong track record. Over the last three quarters, Jordan's results have declined. You have booked a private 45-minute one-to-one. This is a performance conversation, not a disciplinary meeting.</p>
   <p><strong>What you don't know yet:</strong> why the decline has happened.</p></div>
+  <h2>Your framework: PREPARE</h2>
+  <p class="muted">Use PREPARE to guide the conversation. Open the PREPARE job aid in Files at any time.</p>
+  ${prepStrip()}
   <h2>Your task</h2>
   <ol><li>Establish what the evidence shows.</li><li>Understand Jordan's perspective.</li><li>Agree fair, practical next steps, including your own support.</li><li>Decide how progress will be reviewed, and when HR would be involved.</li></ol>
   <div class="card"><h3 style="margin-top:0">Before you start</h3><ul>
@@ -597,7 +621,7 @@ function summaryScreen(){
 function dp6(){
   const opts=[...S.causes].map(c=>`<option value="${c}">${CAUSES[c].n}</option>`).join("")+`<option value="gen">General performance (close rate)</option>`;
   if(!S.actions.length)S.actions=[{},{}];
-  main.innerHTML=`<span class="tag">Decision point 6</span>${chip("PL")}
+  main.innerHTML=`<span class="tag">Decision point 6</span>${chip("PA")}
   <h1>Write Jordan's recovery actions</h1>
   <p>Based on what you found out, write two or three SMART actions. Each one should link to a cause and say what <strong>you</strong> will do to support Jordan.</p>
   <div class="card"><h3 style="margin-top:0">What you found out</h3>${S.causes.size?`<ul>${[...S.causes].map(c=>`<li>${CAUSES[c].n}</li>`).join("")}</ul>`:`<p class="muted">You didn't uncover specific causes. Plan from the scorecard evidence.</p>`}</div>
@@ -710,6 +734,7 @@ function debrief(){
    <table><tbody>${Object.values(r).map(x=>`<tr><td>${x.n}</td><td>${lab(x)}</td></tr>`).join("")}</tbody></table>
    <p class="hint">S3 and S4 are written answers. In this prototype they get an automatic, indicative check; in the full course a tutor reviews them against the rubric.</p>
    <p class="hint">You rated the conversation <strong>${["","Poorly","Not great","OK","Well","Very well"][c]}</strong>. ${gap>0?"Your results suggest it went less well than you felt.":gap<0?"You did better than you expected.":"That matches your results."}</p></div>
+  <div class="card"><span class="tag">Your PREPARE profile</span><p class="muted" style="margin:.4rem 0">How well you applied each stage. Act, Review and Escalate are judged on your plan, because they happen after the meeting.</p>${prepStrip(prepLevels(r))}</div>
   <div class="card"><span class="tag">2 · What you did well</span><ul class="plain">${best.length?best.map(b=>`<li><span class="found">${icon("check",16)} ${b.dp}</span> ${b.o.fb}</li>`).join(""):"<li>Look at the detailed path below to see which choices helped.</li>"}</ul></div>
   <div class="card"><span class="tag">3 · Your most important improvement</span>${worst?`<p><strong>${worst.dp} · ${worst.crit}.</strong> ${worst.o.fb}</p>${worst.o.better?`<p><em>Try instead:</em> ${esc(worst.o.better)}</p>`:""}`:`<p>No weak choices. Your next step is the free-text work: compare your summary and plan with the models below.</p>`}
    ${S.guardedLoss?`<p class="hint">Because Jordan became defensive, ${S.guardedLoss} good question${S.guardedLoss>1?"s":""} got a guarded answer and information stayed hidden.</p>`:""}</div>
@@ -731,6 +756,18 @@ function debrief(){
   say("Debrief ready.");
 }
 
+function prepLevels(r){
+  const avg=f=>{const c=S.choices.filter(f);if(!c.length)return "N";const v=c.reduce((a,x)=>a+x.o.s,0)/(c.length*2);return v>=.8?"P":v>=.5?"D":"N"};
+  const rec=avg(c=>c.dp==="DP3"||c.dp==="DP4");
+  const exa=(()=>{const a=avg(c=>c.dp==="DP5"),k=S.causes.size;const m={P:2,D:1,N:0};const sc=m[a]+(k>=4?2:k>=2?1:0);return sc>=3?"P":sc>=2?"D":"N"})();
+  const acts=S.actions.filter(a=>a.what),sup=acts.filter(a=>(a.support||"").trim().length>5).length;
+  const act=!acts.length?"N":sup===acts.length?"P":sup?"D":"N";
+  const f=S.fu,lead=(f.lead||[]).filter(x=>x!=="quota").length;
+  const revs=(lead>=2?1:0)+(f.lag==="close"?1:0)+((f.freq==="weekly"||f.freq==="fortnightly")?1:0)+(f.rev==="6"?1:0);
+  const rev=revs>=4?"P":revs>=2?"D":"N";
+  const e=f.esc||[];const esc=(e.includes("e3")||e.includes("e4"))?"N":(e.includes("e1")&&e.includes("e2"))?"P":"D";
+  return [r.S1.l,rec,exa,r.S4.l,act,rev,esc];
+}
 function modelSummary(){const b=["So the new financing partner has stricter criteria"];if(S.causes.has("c1"))b.push("and the smaller clinics you've always worked with are being declined because pre-screening hasn't changed");if(S.causes.has("c2"))b.push("and you've been using bigger discounts to rescue some deals");let t=b.join(", ")+".";if(S.causes.has("c3"))t+=" You're not confident talking clinics through the alternative financing options.";if(S.causes.has("c4"))t+=" You're also behind on CRM and follow-up"+(S.causes.has("c5")?" while you're caring for a family member at home.":".");return t+" Have I got that right?"}
 function selfChecks(){
   const P=[["A figure and a trend (e.g. 33% → 17%)"],["The standard it is compared with (30% target)"],["No judgement about Jordan as a person (e.g. \"disengaged\")"],["Open questions, not leading ones"],["Support I could offer"]];
