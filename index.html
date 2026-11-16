@@ -137,6 +137,12 @@ ul.plain{list-style:none;padding:0}ul.plain li{margin:.5rem 0}
 details.card>summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1.05rem}
 details.card[open]>summary{margin-bottom:.6rem}
 .play{font:inherit;font-size:.7rem;font-weight:700;letter-spacing:.03em;background:var(--teal-l);color:var(--teal);border:1px solid var(--teal);border-radius:99px;padding:.05rem .5rem;margin-left:.4rem;cursor:pointer;text-transform:none}
+.cmp2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:.4rem 0 .8rem}
+@media (max-width:620px){.cmp2{grid-template-columns:1fr}}
+.cmp2>div{border:1px solid var(--line);border-radius:8px;padding:.6rem .8rem;font-size:.9rem;background:#fff}
+.cmp2 h4{margin:0 0 .3rem;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cmp2 .modelans{background:var(--teal-l);border-color:#d8cdea}
+.sc legend{font-size:1.02rem}.scres{margin:.4rem 0 0;font-size:.9rem}
 /* stage chips */
 .stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
 .st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
@@ -710,19 +716,50 @@ function debrief(){
   <div class="card"><span class="tag">4 · What was really going on</span><p>You uncovered <strong>${S.causes.size} of 5</strong> contributing factors.</p><div class="meter" role="img" aria-label="${S.causes.size} of 5 factors found"><span style="width:${S.causes.size*20}%"></span></div>
    <ul class="plain">${Object.entries(CAUSES).map(([k,cz])=>`<li>${S.causes.has(k)?`<span class="found">${icon("check",16)} Found</span>`:`<span class="missed">${icon("cross",16)} Missed</span>`} ${cz.n}${S.causes.has(k)?"":`<br><span class="hint">How to uncover it: ${cz.hint}</span>`}</li>`).join("")}</ul>
    <p>The financing change was real and affected the whole team, but it only explained part of Jordan's drop. This called for support and recovery, not a formal PIP.</p></div>
-  <details class="card"><summary>5 · Your full path through the conversation</summary>
+  ${selfCheckHTML()}
+  <details class="card"><summary>6 · Your full path through the conversation</summary>
    ${S.choices.map(c=>`<div class="fb ${c.o.s===2?"good":c.o.s===1?"ok":"bad"}"><strong>${c.dp} · ${c.crit}:</strong> ${c.o.s===2?"Best":c.o.s===1?"Acceptable":"Problematic"}<br>You said: ${esc(c.o.t.replace(/^Paraphrase: /,""))}<br><span class="muted">${c.o.fb}</span>${c.o.better?`<br><em>Stronger:</em> ${esc(c.o.better)}`:""}</div>`).join("")}</details>
-  <details class="card"><summary>6 · Detailed feedback by component</summary>
+  <details class="card"><summary>7 · Detailed feedback by component</summary>
    ${Object.values(r).map(x=>`<h3>${x.n} ${lab(x)}</h3>${x.fb.length?`<ul>${x.fb.map(f=>`<li>${f}</li>`).join("")}</ul>`:"<p>No issues.</p>"}${x.note?`<p class="hint">${x.note}</p>`:""}`).join("")}
    <h3>Fairness check</h3><ul><li>Was the standard clear? (30% close rate, stated with evidence)</li><li>Was Jordan genuinely heard?</li><li>Is every decision based on evidence rather than assumption?</li></ul></details>
   <div class="card"><span class="tag">Reflect</span><div class="field"><label for="refl">What is one thing you'll do differently in a real performance conversation?</label><textarea id="refl"></textarea></div><p class="hint">Your reflection stays on this device. Take the PREPARE job aid back to your team.</p></div>
   <div class="row"><button class="btn" id="retryConv">Try the conversation again</button><button class="btn sec" id="print">Print or save as PDF</button><button class="btn sec" id="again">Start again from the beginning</button></div>`;
+  wireSelfCheck();
   $("#print").onclick=()=>{try{window.print()}catch(e){}};
   $("#again").onclick=()=>{try{localStorage.removeItem("jordanSim")}catch(e){}location.reload()};
   $("#retryConv").onclick=()=>{S.lastPlayed=0;S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";S.guardedLoss=0;S.repairs=0;S.node="open";S.log=[{w:"note",t:"Second attempt. Jordan arrives and sits down."}];go(3)};
   say("Debrief ready.");
 }
 
+function modelSummary(){const b=["So the new financing partner has stricter criteria"];if(S.causes.has("c1"))b.push("and the smaller clinics you've always worked with are being declined because pre-screening hasn't changed");if(S.causes.has("c2"))b.push("and you've been using bigger discounts to rescue some deals");let t=b.join(", ")+".";if(S.causes.has("c3"))t+=" You're not confident talking clinics through the alternative financing options.";if(S.causes.has("c4"))t+=" You're also behind on CRM and follow-up"+(S.causes.has("c5")?" while you're caring for a family member at home.":".");return t+" Have I got that right?"}
+function selfChecks(){
+  const P=[["A figure and a trend (e.g. 33% → 17%)"],["The standard it is compared with (30% target)"],["No judgement about Jordan as a person (e.g. \"disengaged\")"],["Open questions, not leading ones"],["Support I could offer"]];
+  const Sm=[["Only what Jordan actually said, nothing added"],["The financing criteria and the smaller clinics"]];
+  if(S.causes.has("c2"))Sm.push(["The discounting"]);if(S.causes.has("c4"))Sm.push(["The CRM and follow-up delays"]);if(S.causes.has("c5"))Sm.push(["The caring situation, acknowledged respectfully"]);Sm.push(["A check at the end (\"Have I got that right?\")"]);
+  const A=[["Each action is linked to a cause I found"],["Each action has a measure with a number"],["Each action has a realistic timescale"],["I said what I will do to support Jordan"],["Nothing promised outside my authority (targets, leave)"]];
+  if(S.causes.has("c5"))A.push(["I planned to seek HR guidance on support for the caring situation"]);
+  return [
+   {id:"p",t:"Conversation plan (S1)",mine:`<strong>Gap:</strong> ${esc(S.plan.gap)}<br><strong>Opening:</strong> ${esc(S.plan.opening)}<br><strong>Questions:</strong> ${esc(S.plan.questions)}<br><strong>Support:</strong> ${esc(S.plan.support)}`,
+    model:`<strong>Gap:</strong> Close rate has fallen from 33% to 25% to 17% over three quarters, against a 30% target.<br><strong>Opening:</strong> "Your close rate has moved from 33% to 17% over three quarters, against a 30% target. I'd like to understand what you're seeing before we decide anything. What's changed from your side?"<br><strong>Questions:</strong> Talk me through the declined proposals. What has changed since your results were stronger? Is anything about the new criteria unclear?<br><strong>Support:</strong> A briefing on the financing criteria, a pipeline review, joint visits.`,list:P},
+   {id:"s",t:"Summarise-back (S3)",mine:esc(S.summary),model:esc(modelSummary()),list:Sm},
+   {id:"a",t:"SMART actions (S4)",mine:S.actions.filter(a=>a.what).map((a,i)=>`<strong>${i+1}.</strong> ${esc(a.what)}. <em>Measure:</em> ${esc(a.measure)}. <em>When:</em> ${esc(a.when)}. <em>My support:</em> ${esc(a.support)}`).join("<br>"),
+    model:`<strong>1.</strong> Pre-screen every new proposal against the financing criteria. <em>Measure:</em> 10 of 10 proposals pre-screened within 2 weeks; approval back above 70% by end of next quarter. <em>Support:</em> criteria briefing this week and a joint pipeline review.<br><strong>2.</strong> Update CRM within 48 hours and follow up every demo within 3 working days. <em>Measure:</em> 100% of contacts logged. <em>Support:</em> weekly 20-minute check-in.${S.causes.has("c3")?"<br><strong>3.</strong> Practise financing conversations. <em>Measure:</em> two role-plays and one observed call in 3 weeks. <em>Support:</em> I'll run the role-plays.":""}${S.causes.has("c5")?"<br><em>Plus:</em> check policy and seek HR guidance on flexible working or other support.":""}`,list:A}];
+}
+function selfCheckHTML(){
+  S.self=S.self||{};
+  return `<div class="card" id="selfcheck"><span class="tag">5 · Check your written answers</span>
+  <p>The computer can only spot keywords, so judge your own writing too. Compare your answer with the model, then tick what yours includes.</p>
+  ${selfChecks().map(b=>`<fieldset class="sc"><legend>${b.t}</legend>
+   <div class="cmp2"><div><h4>Your answer</h4><p>${b.mine||"<em>(empty)</em>"}</p></div><div class="modelans"><h4>Model answer</h4><p>${b.model}</p></div></div>
+   ${b.list.map((l,i)=>`<label class="opt"><input type="checkbox" data-sc="${b.id}" data-i="${i}" ${(S.self[b.id]||[]).includes(i)?"checked":""}>${l[0]}</label>`).join("")}
+   <p class="scres" id="scres_${b.id}" aria-live="polite"></p></fieldset>`).join("")}</div>`;
+}
+function wireSelfCheck(){
+  const lists=Object.fromEntries(selfChecks().map(b=>[b.id,b.list.length]));
+  const upd=id=>{const n=(S.self[id]||[]).length,m=lists[id],r=n/m;if(!n){$("#scres_"+id).textContent="Tick each point your answer includes.";return}$("#scres_"+id).innerHTML=`Self-check: ${n} of ${m} · <span class="lvl ${r>=.8?"P":r>=.5?"D":"N"}">${r>=.8?"Proficient":r>=.5?"Developing":"Not yet"} (self-assessed)</span>`};
+  main.querySelectorAll("[data-sc]").forEach(el=>el.onchange=()=>{const id=el.dataset.sc;S.self[id]=[...main.querySelectorAll(`[data-sc="${id}"]:checked`)].map(x=>+x.dataset.i);upd(id);save()});
+  Object.keys(lists).forEach(upd);
+}
 function hasSave(){try{const d=JSON.parse(localStorage.getItem("jordanSim")||"null");return d&&d.stage>0&&d.stage<6}catch(e){return false}}
 function resume(){try{const d=JSON.parse(localStorage.getItem("jordanSim"));Object.assign(S,d);S.causes=new Set(d.causes);if(S.stage===3&&!CONVO[S.node]&&S.node!=="end")S.node="open";go(S.stage)}catch(e){go(1)}}
 progress();syncKF();render();
