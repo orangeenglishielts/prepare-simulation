@@ -153,6 +153,10 @@ details.card[open]>summary{margin-bottom:.6rem}
 .prep .pt{font-size:.68rem;color:var(--muted);line-height:1.2}
 .prep .lvl{font-size:.68rem}
 .terms{margin-top:.8rem;border:1px solid var(--line);border-radius:8px;padding:.5rem .7rem;background:#fff}.terms summary{cursor:pointer;font-weight:700;color:var(--teal)}.terms dt{font-weight:700;margin-top:.4rem}.terms dd{margin:0 0 .2rem}
+.progress .jump{all:unset;cursor:pointer;display:block;width:100%;text-align:center}
+.progress .jump:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.progress li:has(.jump):hover{background:rgba(255,255,255,.35)}
+.jl{margin-left:.5rem;white-space:nowrap}.jl select{width:auto;display:inline-block;padding:.15rem .3rem;margin-left:.3rem}
 /* stage chips */
 .stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
 .st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
@@ -419,7 +423,26 @@ function demoFill(stage){
     {cause:S.causes.has("c4")?"c4":"gen",what:"Update CRM within 48 hours and follow up every demo within 3 working days",measure:"100% of contacts logged within 48 hours",when:"Weekly from next Monday",support:"Weekly 20-minute check-in; help prioritise accounts"}]}
   if(stage===5&&!S.fu.lag){S.fu={lead:["calls","prescreen","crm"],lag:"close",freq:"weekly",rev:"6",succ:"Pre-screening and CRM habits in place; close rate rising towards 30%.",esc:["e1","e2"],conf:4}}
 }
-function demoBadge(){return DEMO?`<div class="demo" role="note">Demo mode: example answers are filled in. Change anything, or just press Continue.</div>`:""}
+function demoBadge(){return DEMO?`<div class="demo" role="note">Demo mode: example answers are filled in. Change anything, or just press Continue. <label class="jl">Jump to <select id="jumpSel">${STAGES.map((t,i)=>`<option value="${i}" ${i===S.stage?"selected":""}>${i+1}. ${t}</option>`).join("")}</select></label></div>`:""}
+function demoAutoConvo(){
+  if(S.choices.length)return;
+  S.log=[{w:"note",t:"The meeting room. Jordan arrives on time and sits down."}];S.mood="neutral";
+  let id="open";
+  while(id&&id!=="end"){const n=CONVO[id];
+    if(n.type==="summary"){if(!S.summary)S.summary="";demoFill(3);if(!S.summary)S.summary=modelSummary();S.log.push({w:"m",t:S.summary});S.log.push({w:"j",t:"Yes, that's it. Thanks for actually listening."});id=n.next;continue}
+    if(n.needs&&!S.causes.has(n.needs)){id=n.next;continue}
+    if(n.jline)S.log.push({w:"j",t:n.jline});
+    const o=n.opts.filter(x=>!x.needs||S.causes.has(x.needs)).find(x=>x.s===2)||n.opts[0];
+    S.log.push({w:"m",t:o.t.replace(/^Paraphrase: /,"")});S.log.push({w:"j",t:o.r});S.mood=o.mood;[].concat(o.unlock||[]).forEach(c=>S.causes.add(c));
+    S.choices.push({dp:n.dp,crit:n.crit,q:n.q,o,all:n.opts});id=n.next}
+  S.node="end";S.lastPlayed=S.log.length;
+}
+function demoJump(n){
+  for(const st of [1,2])if(n>st)demoFill(st);
+  if(n>3)demoAutoConvo(); else if(n===3){S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.guardedLoss=0;S.node="open";S.log=[{w:"note",t:"The meeting room. Jordan arrives on time and sits down."}];S.mood="neutral";S.lastPlayed=0}
+  if(n>4)demoFill(4);if(n>5)demoFill(5);
+  go(n);
+}
 
 /* ============ STATE ============ */
 const S={stage:0,dp1:{},sort:{},plan:{},log:[],choices:[],causes:new Set(),missedCues:[],summary:"",sumCheck:[],actions:[],fu:{},node:"open",mood:"neutral"};
@@ -430,7 +453,8 @@ function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">"
 
 function progress(){
   $("#stepnow").textContent=`Step ${S.stage+1} of ${STAGES.length}: ${STAGES[S.stage]}`;
-  $("#progress").innerHTML=STAGES.map((s,i)=>`<li class="${i<S.stage?'done':i===S.stage?'now':''}" ${i===S.stage?'aria-current="step"':''}>${s}</li>`).join("");
+  $("#progress").innerHTML=STAGES.map((s,i)=>`<li class="${i<S.stage?'done':i===S.stage?'now':''}" ${i===S.stage?'aria-current="step"':''}>${DEMO?`<button class="jump" data-j="${i}">${s}</button>`:s}</li>`).join("");
+  if(DEMO)$("#progress").querySelectorAll(".jump").forEach(b=>b.onclick=()=>demoJump(+b.dataset.j));
 }
 const CHIP={PA:["st-PL","Plan · Act","plan"],P:["st-P","Pinpoint","target"],R:["st-R","Receive","ear"],E:["st-E","Examine","search"],PL:["st-PL","Plan","plan"],RE:["st-RE","Review · Escalate","cycle"]};
 function chip(k){const c=CHIP[k];return `<span class="stagechip ${c[0]}">${icon(c[2],14)} PREPARE · ${c[1]}</span>`}
@@ -485,7 +509,7 @@ function render(){
   demoFill(S.stage);
   const f=[brief,dp1,dp2,convo,dp6,dp7,debrief][S.stage];
   f();
-  if(DEMO&&S.stage>0&&S.stage<6)main.insertAdjacentHTML("afterbegin",demoBadge());
+  if(DEMO&&S.stage<7){main.insertAdjacentHTML("afterbegin",demoBadge());const js=$("#jumpSel");if(js)js.onchange=()=>demoJump(+js.value)}
 }
 
 function brief(){
