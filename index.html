@@ -115,6 +115,20 @@ ul.plain{list-style:none;padding:0}ul.plain li{margin:.5rem 0}
 .convo1 .log{max-height:360px}
 .hero.sm .hero-t{max-width:30%}.hero.sm .hero-t strong{font-size:1.6rem}
 .demo{background:#fff6dd;border:1px solid #ecdca6;color:#5a4500;border-radius:8px;padding:.5rem .8rem;font-size:.88rem;margin-bottom:.6rem}
+.sheet{border:0;padding:0;background:transparent;max-width:min(680px,94vw);width:100%}
+.sheet::backdrop{background:rgba(31,26,43,.55)}
+.sheet[open]{display:flex;flex-direction:column;align-items:center;gap:.8rem}
+.paper{background:#fffdf8;width:100%;padding:1.6rem 1.8rem 1rem;box-shadow:0 18px 40px rgba(0,0,0,.35),0 2px 0 #e9e3d6;transform:rotate(-.6deg);border-radius:2px;font-family:"Courier New",Courier,monospace;color:#2a2a2a;background-image:linear-gradient(transparent 96%,rgba(0,0,0,.025) 96%);background-size:100% 26px}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #2a2a2a;padding-bottom:.6rem;margin-bottom:.8rem;gap:1rem}
+.plogo{height:38px;width:auto;filter:brightness(.25) saturate(0)}
+.pmeta{font-size:.68rem;text-align:right;letter-spacing:.05em;line-height:1.5}
+.paper h2{font-family:"Courier New",Courier,monospace;font-weight:700;font-size:1.05rem;margin:.2rem 0 .7rem;color:#2a2a2a}
+.ptable{background:transparent;font-size:.85rem}
+.ptable th,.ptable td{border:0;border-bottom:1px dashed #b9b2a3;padding:.4rem .35rem;text-align:right;background:transparent}
+.ptable th:first-child,.ptable td:first-child{text-align:left}
+.ptable thead th{border-bottom:1.5px solid #2a2a2a;font-size:.75rem;letter-spacing:.04em}
+.pnote{font-size:.74rem;margin:.8rem 0 .4rem;line-height:1.5}
+.pfoot{font-size:.65rem;text-align:center;color:#777;border-top:1px solid #ddd;padding-top:.4rem;margin-top:.6rem}
 /* stage chips */
 .stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
 .st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
@@ -135,7 +149,7 @@ ul.plain{list-style:none;padding:0}ul.plain li{margin:.5rem 0}
 .meter span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--rose))}
 .conf{display:flex;gap:.4rem;flex-wrap:wrap}
 .conf label{border:1px solid var(--line);border-radius:8px;padding:.4rem .7rem;cursor:pointer;background:#fff}
-@media print{header.top,.proto,.row,.filesbtn,.drawer,.kf{display:none!important} body{background:#fff}}
+@media print{header.top,.proto,.row,.filesbtn,.drawer,.sheet{display:none!important} body{background:#fff}}
 </style>
 </head>
 <body>
@@ -143,15 +157,26 @@ ul.plain{list-style:none;padding:0}ul.plain li{margin:.5rem 0}
 <header class="top">
   <div class="brand"><img src="img/lumera-logo-h.webp" alt="Lumera" height="40" style="height:40px;width:auto"><small style="border-left:1px solid rgba(255,255,255,.35);padding-left:.7rem">Manager Simulation</small></div>
   <ol class="progress" id="progress" aria-label="Simulation stages"></ol>
-  <div class="hdrbtns"><span class="ts"><button id="tsDown" aria-label="Smaller text">A−</button> <button id="tsUp" aria-label="Larger text">A+</button></span><button class="filesbtn" id="kfBtn" aria-controls="kf" aria-expanded="true">Key figures</button><button class="filesbtn" id="filesBtn" aria-controls="drawer" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Files</button></div>
+  <div class="hdrbtns"><span class="ts"><button id="tsDown" aria-label="Smaller text">A−</button> <button id="tsUp" aria-label="Larger text">A+</button></span><button class="filesbtn" id="kfBtn" aria-haspopup="dialog">Scorecard</button><button class="filesbtn" id="filesBtn" aria-controls="drawer" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Files</button></div>
 </header>
 <div class="proto" role="note">Prototype for the MDOE407 group project (Managing Underperformance: Effective Performance Conversations for New Managers). Fictional company, people and data. Scoring is illustrative.</div>
-<section class="kf" id="kf" aria-labelledby="kfh" hidden><div class="kf-in"><h2 id="kfh">Jordan · Q1 → Q3</h2>
-<div class="kpi"><b>Close rate 33 → 25 → 17%</b><span class="cmp">Team Q3 27% · Target 30%</span></div>
-<div class="kpi"><b>Financing approval 80 → 62 → 40%</b><span class="cmp">Team 84 → 80 → 76%</span></div>
-<div class="kpi"><b>Avg discount 6 → 9 → 13%</b><span class="cmp">Team 8% · Limit ≤10%</span></div>
-<div class="kpi"><b>Demos 18 → 16</b><span class="cmp">Team Q3 17</span></div><div class="kpi"><b>Proposals 12 → 11</b><span class="cmp">Team Q3 12</span></div>
-<div class="kpi"><b>Quota 102 → 81 → 64%</b><span class="cmp">Team Q3 91%</span></div></div></section>
+<dialog id="kf" class="sheet" aria-labelledby="kfh">
+ <div class="paper">
+  <div class="ph"><img src="img/lumera-logo-h.webp" alt="Lumera" class="plogo"><div class="pmeta">INTERNAL · PERFORMANCE REPORT<br>Printed for: Regional Manager, North</div></div>
+  <h2 id="kfh">Quarterly scorecard: Jordan Lee</h2>
+  <table class="ptable"><thead><tr><th>Measure</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Team Q3</th><th>Target</th></tr></thead><tbody>
+   <tr><td>Quota attainment</td><td>102%</td><td>81%</td><td>64%</td><td>91%</td><td>100%</td></tr>
+   <tr><td>Demonstrations</td><td>18</td><td>17</td><td>16</td><td>17</td><td>–</td></tr>
+   <tr><td>Proposals issued</td><td>12</td><td>12</td><td>11</td><td>12</td><td>–</td></tr>
+   <tr><td>Close rate</td><td>33%</td><td>25%</td><td>17%</td><td>27%</td><td>30%</td></tr>
+   <tr><td>Financing approval</td><td>80%</td><td>62%</td><td>40%</td><td>76%</td><td>–</td></tr>
+   <tr><td>Avg discount (won deals)</td><td>6%</td><td>9%</td><td>13%</td><td>8%</td><td>≤10%</td></tr>
+  </tbody></table>
+  <p class="pnote">Team averages Q1 → Q3: close rate 31% → 29% → 27% · financing approval 84% → 80% → 76%.<br>Note: new financing partner from the start of Q2.</p>
+  <div class="pfoot">Page 1 of 1 · Confidential</div>
+ </div>
+ <button class="btn" id="kfClose">Close</button>
+</dialog>
 <main id="main" tabindex="-1"></main>
 <div id="live" class="sr" aria-live="polite"></div>
 
@@ -347,9 +372,11 @@ function progress(){
 }
 const CHIP={P:["st-P","Pinpoint","target"],R:["st-R","Receive","ear"],E:["st-E","Examine","search"],PL:["st-PL","Plan","plan"],RE:["st-RE","Review · Escalate","cycle"]};
 function chip(k){const c=CHIP[k];return `<span class="stagechip ${c[0]}">${icon(c[2],14)} PREPARE · ${c[1]}</span>`}
-let kfOn=true;
-function syncKF(){const show=kfOn&&S.stage>=1&&S.stage<=5;$("#kf").hidden=!show;$("#kfBtn").setAttribute("aria-expanded",String(show));$("#kfBtn").textContent=kfOn?"Hide figures":"Key figures";document.documentElement.style.setProperty("--hh",$("header.top").offsetHeight+"px")}
-$("#kfBtn").onclick=()=>{kfOn=!kfOn;syncKF()};
+function syncKF(){}
+const kfD=$("#kf");
+$("#kfBtn").onclick=()=>{try{kfD.showModal()}catch(e){kfD.setAttribute("open","")}$("#kfClose").focus()};
+$("#kfClose").onclick=()=>{kfD.close?kfD.close():kfD.removeAttribute("open");$("#kfBtn").focus()};
+kfD.addEventListener("click",e=>{if(e.target===kfD)$("#kfClose").click()});
 let fs=17;const setFs=d=>{fs=Math.min(22,Math.max(14,fs+d));document.documentElement.style.fontSize=fs+"px";syncKF()};
 $("#tsUp").onclick=()=>setFs(1);$("#tsDown").onclick=()=>setFs(-1);
 window.addEventListener("resize",syncKF);
