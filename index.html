@@ -134,6 +134,7 @@ ul.plain{list-style:none;padding:0}ul.plain li{margin:.5rem 0}
 .pfoot{font-size:.65rem;text-align:center;color:#777;border-top:1px solid #ddd;padding-top:.4rem;margin-top:.6rem}
 details.card>summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:1.05rem}
 details.card[open]>summary{margin-bottom:.6rem}
+.play{font:inherit;font-size:.7rem;font-weight:700;letter-spacing:.03em;background:var(--teal-l);color:var(--teal);border:1px solid var(--teal);border-radius:99px;padding:.05rem .5rem;margin-left:.4rem;cursor:pointer;text-transform:none}
 /* stage chips */
 .stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
 .st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
@@ -162,7 +163,7 @@ details.card[open]>summary{margin-bottom:.6rem}
 <header class="top">
   <div class="brand"><img src="img/lumera-logo-h.webp" alt="Lumera" height="40" style="height:40px;width:auto"><small style="border-left:1px solid rgba(255,255,255,.35);padding-left:.7rem">Manager Simulation</small></div>
   <ol class="progress" id="progress" aria-label="Simulation stages"></ol><div class="stepnow" id="stepnow" aria-hidden="true"></div>
-  <div class="hdrbtns"><span class="ts"><button id="tsDown" aria-label="Smaller text">A−</button> <button id="tsUp" aria-label="Larger text">A+</button></span><button class="filesbtn" id="kfBtn" aria-haspopup="dialog">Scorecard</button><button class="filesbtn" id="filesBtn" aria-controls="drawer" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Files</button></div>
+  <div class="hdrbtns"><button class="filesbtn" id="sndBtn" aria-pressed="true">Sound on</button><span class="ts"><button id="tsDown" aria-label="Smaller text">A−</button> <button id="tsUp" aria-label="Larger text">A+</button></span><button class="filesbtn" id="kfBtn" aria-haspopup="dialog">Scorecard</button><button class="filesbtn" id="filesBtn" aria-controls="drawer" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Files</button></div>
 </header>
 <div class="proto" role="note">Prototype for the MDOE407 group project (Managing Underperformance: Effective Performance Conversations for New Managers). Fictional company, people and data. Scoring is illustrative.</div>
 <dialog id="kf" class="sheet" aria-labelledby="kfh">
@@ -347,6 +348,14 @@ const CONVO={
   ], next:"end"}
 };
 
+/* ============ AUDIO ============ */
+const VOICE=Object.fromEntries(["It's not just me. It's the new financing partner. Everyone's struggling.", "Yeah... I know it's dropped. A lot of it is the new financing partner, honestly. Half my proposals are getting knocked back.", "Oh. Okay, thanks. Yes, it's been tough with the financing.", "Right. So it's my fault then.", "Mostly the smaller independents, the sole practitioners and newer clinics. I've been sending them through the same way I always did. To be honest, I haven't really got my head round the new criteria.", "Sure.", "Yes, exactly. And when they get declined I've been... trying to rescue them with a bigger discount, so at least something closes. I know that's not ideal.", "There was a webinar, but it was quick. I'm not confident talking clinics through the alternatives, so I tend to avoid it.", "I've had a lot on.", "It's been a lot lately, to be honest. I'm behind on my CRM notes as well.", "Someone in my family has been seriously ill, and I've been doing most of the caring in the evenings. Some days I'm just... behind. Follow-ups have slipped, and the CRM. I didn't want it to look like an excuse.", "A few. And some follow-ups after demos have slipped, which I know isn't good.", "Understood.", "Yes, that's it. Thanks for actually listening.", "Mostly, yes.", "So really it's the financing change, isn't it? Can we agree that's the main thing?", "That's fair. I can see that.", "Really? That would help a lot.", "It's not an excuse. It's real.", "Thanks. That actually helps. I'd rather sort this out than let it drift.", "Are you sure that's allowed?", "Right. Okay.", "...Okay. Thanks. It has been a difficult few months.", "(guarded) I don't know. It's just been hard."].map((t,i)=>[t,`audio/j${String(i+1).padStart(2,'0')}.mp3`]));
+let soundOn=true;try{soundOn=localStorage.getItem('jsSound')!=='off'}catch(e){}
+const player=new Audio();
+let queue=[];player.addEventListener('ended',()=>{if(queue.length)playLine(queue.shift(),true)});
+function playQueue(q){queue=q.slice(1);if(q.length)playLine(q[0],true)}
+function playLine(t,keep){if(!keep)queue=[];const src=VOICE[t];if(!src)return;try{player.pause();player.src=src;player.play().catch(()=>{})}catch(e){}}
+
 /* ============ DEMO MODE ============ */
 let DEMO=location.hash==="#demo";
 function demoFill(stage){
@@ -379,6 +388,8 @@ function progress(){
 const CHIP={P:["st-P","Pinpoint","target"],R:["st-R","Receive","ear"],E:["st-E","Examine","search"],PL:["st-PL","Plan","plan"],RE:["st-RE","Review · Escalate","cycle"]};
 function chip(k){const c=CHIP[k];return `<span class="stagechip ${c[0]}">${icon(c[2],14)} PREPARE · ${c[1]}</span>`}
 function syncKF(){}
+function syncSnd(){$("#sndBtn").textContent=soundOn?"Sound on":"Sound off";$("#sndBtn").setAttribute("aria-pressed",String(soundOn))}
+$("#sndBtn").onclick=()=>{soundOn=!soundOn;if(!soundOn)player.pause();try{localStorage.setItem('jsSound',soundOn?'on':'off')}catch(e){}syncSnd()};syncSnd();
 const kfD=$("#kf");
 $("#kfBtn").onclick=()=>{try{kfD.showModal()}catch(e){kfD.setAttribute("open","")}$("#kfClose").focus()};
 $("#kfClose").onclick=()=>{kfD.close?kfD.close():kfD.removeAttribute("open");$("#kfBtn").focus()};
@@ -443,11 +454,12 @@ function brief(){
   <li class="il">${icon("chat")}<span>There are no hints during the conversation. You'll get full feedback in the debrief.</span></li>
   <li class="il">${icon("clock")}<span>About 30 minutes, no time limit. You can stop and resume later.</span></li>
   <li class="il">${icon("kbd")}<span>Everything works with a keyboard. Use A− / A+ to change the text size.</span></li>
+  <li class="il">${icon("chat")}<span>Jordan's lines play as audio and are always shown as text. Use "Sound on/off" in the header, or ▶ Play to hear a line again.</span></li>
   <li class="il">${icon("flag")}<span>Success does <em>not</em> mean starting a formal PIP. It means evidence, a fair hearing, proportionate support and a clear review.</span></li></ul></div>
   <h2>How you'll be assessed</h2><p class="muted">Five pieces of evidence, each judged as Proficient, Developing or Not yet.</p>
   <div class="rubric"><div>${icon("target")}<b>S1 Preparation</b>Reading the evidence and planning the talk</div><div>${icon("chat")}<b>S2 Conversation</b>Objectivity, questioning, listening, judgement</div><div>${icon("ear")}<b>S3 Summary</b>An accurate summarise-back</div><div>${icon("plan")}<b>S4 Actions</b>SMART, linked to causes, with your support</div><div>${icon("cycle")}<b>S5 Follow-up</b>Monitoring, review and fair escalation</div></div>
   <div class="row"><button class="btn" id="start">Start: review the evidence</button><button class="btn sec" id="peek">Open the files</button>${hasSave()?'<button class="btn sec" id="resume">Resume where I left off</button>':''}<button class="btn sec" id="demoBtn">Run as demo (answers filled in)</button></div>`;
-  $("#start").onclick=()=>{S.dp1={};S.sort={};S.plan={};S.log=[];S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";go(1)}; $("#peek").onclick=openFiles;
+  $("#start").onclick=()=>{S.lastPlayed=0;S.dp1={};S.sort={};S.plan={};S.log=[];S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";go(1)}; $("#peek").onclick=openFiles;
   if($("#resume"))$("#resume").onclick=resume;
   $("#demoBtn").onclick=()=>{DEMO=true;try{history.replaceState(null,"","#demo")}catch(e){}$("#start").click()};
 }
@@ -521,11 +533,13 @@ function convo(){
   main.innerHTML=`<span class="tag">${n.dp} · Conversation</span>${chip(n.dp==="DP3"?"R":n.dp==="DP4"?"R":"E")}
   <h1>Your one-to-one with Jordan</h1>
   <div class="scene" role="img" aria-label="Meeting room. ${S.mood==="neutral"?"Jordan sits opposite you.":"Jordan looks "+S.mood+"."}"><div class="jordan">${face(S.mood)}</div></div>
-  <div class="convo1"><div><div class="log" id="log" aria-label="Conversation so far">${S.log.map(l=>l.w==="note"?`<div class="msg note">${esc(l.t)}</div>`:`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Jordan":"You"}</span>${esc(l.t)}</div>`).join("")}</div>
+  <div class="convo1"><div><div class="log" id="log" aria-label="Conversation so far">${S.log.map(l=>l.w==="note"?`<div class="msg note">${esc(l.t)}</div>`:`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Jordan":"You"}${l.w==="j"&&VOICE[l.t]?` <button class="play" data-t="${esc(l.t)}" aria-label="Play Jordan's line">▶ Play</button>`:""}</span>${esc(l.t)}</div>`).join("")}</div>
   <fieldset><legend>${esc(n.q)}</legend>
   ${opts.map((o,i)=>`<label class="opt"><input type="radio" name="c" value="${i}">${esc(o.t)}</label>`).join("")}</fieldset>
   <div class="row"><button class="btn" id="say" disabled>Say this</button></div></div></div>`;
   const lg=$("#log");lg.scrollTop=lg.scrollHeight;
+  lg.querySelectorAll(".play").forEach(b=>b.onclick=()=>playLine(b.dataset.t));
+  if(soundOn){const from=S.lastPlayed||0;const q=S.log.slice(from).filter(l=>l.w==="j"&&VOICE[l.t]).map(l=>l.t);S.lastPlayed=S.log.length;playQueue(q)}
   let pick=null;main.querySelectorAll("input[name=c]").forEach(r=>r.onchange=()=>{pick=opts[+r.value];$("#say").disabled=false});
   if(DEMO){const bi=opts.findIndex(o=>o.s===2);const el=main.querySelector(`input[name=c][value="${bi<0?0:bi}"]`);if(el){el.checked=true;pick=opts[+el.value];$("#say").disabled=false}}
   $("#say").onclick=()=>{
@@ -694,7 +708,7 @@ function debrief(){
   <div class="row"><button class="btn" id="retryConv">Try the conversation again</button><button class="btn sec" id="print">Print or save as PDF</button><button class="btn sec" id="again">Start again from the beginning</button></div>`;
   $("#print").onclick=()=>{try{window.print()}catch(e){}};
   $("#again").onclick=()=>{try{localStorage.removeItem("jordanSim")}catch(e){}location.reload()};
-  $("#retryConv").onclick=()=>{S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";S.guardedLoss=0;S.repairs=0;S.node="open";S.log=[{w:"note",t:"Second attempt. Jordan arrives and sits down."}];go(3)};
+  $("#retryConv").onclick=()=>{S.lastPlayed=0;S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";S.guardedLoss=0;S.repairs=0;S.node="open";S.log=[{w:"note",t:"Second attempt. Jordan arrives and sits down."}];go(3)};
   say("Debrief ready.");
 }
 
