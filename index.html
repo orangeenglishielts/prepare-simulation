@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Jordan Conversation | PREPARE Simulation Prototype</title>
+<link rel="icon" href="img/lumera-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#2d2148; --teal:#6a4c9c; --teal-l:#efe9f7; --sand:#faf6f3; --ink:#1f1a2b; --muted:#5f5870;
+  --line:#e2dbe6; --good:#2e7d4f; --ok:#8a5f00; --bad:#b3261e; --card:#fff; --focus:#e8a33d; --rose:#c25b78; --rose-l:#fbeef2;
+  --pin:#2f6f9f; --rec:#2e7d6b; --exa:#8a5f00; --pla:#6a4c9c; --rev:#c25b78;
+}
+*{box-sizing:border-box}
+input[type=radio],input[type=checkbox]{accent-color:var(--teal)}
+html{font-size:17px}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--sand);line-height:1.55}
+a{color:var(--teal)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;padding:.5rem 1rem;z-index:99}
+.skip:focus{left:1rem}
+header.top{background:linear-gradient(90deg,#2d2148,#43306b);color:#fff;padding:.7rem 1.2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:.6rem}
+.brand .wm{font-weight:600;letter-spacing:.28em;font-size:.95rem}
+.brand small{display:block;font-weight:400;opacity:.8;font-size:.72rem;letter-spacing:.04em}
+.progress{display:flex;gap:.3rem;flex:1;min-width:240px;list-style:none;margin:0;padding:0}
+.progress li{flex:1;font-size:.72rem;text-align:center;padding:.3rem .2rem;border-radius:4px;background:rgba(255,255,255,.12);color:#cfd8e3}
+.progress li.done{background:rgba(255,255,255,.28);color:#fff}
+.progress li.now{background:#fff;color:var(--navy);font-weight:700}
+.filesbtn{background:#fff;color:var(--navy);border:0;border-radius:6px;padding:.5rem .9rem;font-weight:700;cursor:pointer;font-size:.9rem}
+.proto{background:#fff6dd;color:#5a4500;font-size:.8rem;padding:.4rem 1.2rem;border-bottom:1px solid #ecdca6}
+main{max-width:860px;margin:0 auto;padding:1.4rem 1.1rem 4rem}
+h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:2.1rem;line-height:1.15;margin:.3rem 0 .8rem;color:var(--navy)}
+h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:1.45rem;color:var(--navy);margin:1.4rem 0 .5rem}
+h3{font-size:1.05rem;margin:1rem 0 .4rem}
+.card{background:var(--card);border:1px solid var(--line);box-shadow:0 1px 3px rgba(45,33,72,.06);border-radius:12px;padding:1.1rem 1.2rem;margin:1rem 0}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);background:var(--teal-l);padding:.15rem .5rem;border-radius:4px}
+.muted{color:var(--muted)}
+.btn{display:inline-block;background:var(--teal);box-shadow:0 2px 0 rgba(45,33,72,.25);color:#fff;border:0;border-radius:8px;padding:.7rem 1.2rem;font-size:1rem;font-weight:700;cursor:pointer}
+.btn:disabled{background:#b9b0c8;box-shadow:none;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--teal);border:2px solid var(--teal)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin-top:1rem}
+table{border-collapse:collapse;width:100%;font-size:.92rem;background:#fff}
+th,td{border:1px solid var(--line);padding:.45rem .55rem;text-align:left;vertical-align:top}
+th{background:#eef1f4}
+td.num,th.num{text-align:right}
+fieldset{border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;margin:.8rem 0;background:#fff}
+legend{font-weight:700;padding:0 .3rem}
+label.opt{display:flex;gap:.6rem;align-items:flex-start;padding:.55rem .6rem;border:1px solid var(--line);border-radius:8px;margin:.4rem 0;cursor:pointer;background:#fff}
+label.opt:hover{border-color:var(--teal)}
+label.opt input{margin-top:.3rem;width:1.1rem;height:1.1rem;flex:none}
+textarea,input[type=text],select{width:100%;font:inherit;padding:.55rem .6rem;border:1px solid #aab3bd;border-radius:6px;background:#fff}
+textarea{min-height:5.5rem}
+.field{margin:.7rem 0}
+.field label{display:block;font-weight:600;margin-bottom:.25rem}
+.hint{font-size:.85rem;color:var(--muted)}
+.sortgrid{display:grid;gap:.5rem}
+.sortitem{display:grid;grid-template-columns:1fr minmax(170px,230px);gap:.6rem;align-items:center;background:#fff;border:1px solid var(--line);border-radius:8px;padding:.55rem .7rem}
+@media (max-width:620px){.sortitem{grid-template-columns:1fr}}
+/* conversation */
+.convo{display:grid;grid-template-columns:150px 1fr;gap:1rem;align-items:start}
+@media (max-width:620px){.convo{grid-template-columns:1fr}}
+.jordan{text-align:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem}
+.jordan .mood{font-size:.8rem;font-weight:700;color:var(--navy);margin-top:.3rem}
+.log{background:#fff;border:1px solid var(--line);border-radius:10px;padding:.6rem .9rem;max-height:420px;overflow:auto}
+.msg{margin:.55rem 0;padding:.55rem .75rem;border-radius:10px;max-width:92%}
+.msg.j{background:#eef1f4}
+.msg.m{background:var(--teal-l);margin-left:auto}
+.msg .who{display:block;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.msg.note{background:#fff6dd;max-width:100%;font-size:.88rem}
+/* drawer */
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,100%);background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:50;transform:translateX(105%);transition:transform .2s;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer header{background:var(--navy);color:#fff;padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center}
+.drawer header button{background:#fff;color:var(--navy);border:0;border-radius:6px;padding:.4rem .8rem;font-weight:700;cursor:pointer}
+.drawer .tabs{display:flex;flex-wrap:wrap;gap:.3rem;padding:.6rem;border-bottom:1px solid var(--line)}
+.drawer .tabs button{border:1px solid var(--line);background:#f4f6f8;border-radius:6px;padding:.35rem .6rem;font-size:.82rem;cursor:pointer}
+.drawer .tabs button[aria-selected=true]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.drawer .doc{padding:1rem;overflow:auto;flex:1;font-size:.93rem}
+.email{border:1px solid var(--line);border-radius:8px;padding:.8rem;background:#fafbfc}
+/* debrief */
+.lvl{font-weight:700;padding:.15rem .5rem;border-radius:4px;font-size:.82rem;white-space:nowrap}
+.lvl.P{background:#e1f2e7;color:var(--good)} .lvl.D{background:#fdf0d2;color:var(--ok)} .lvl.N{background:#f9e0de;color:var(--bad)}
+.fb{border-left:4px solid var(--teal);padding:.4rem .8rem;margin:.6rem 0;background:#fff}
+.fb.bad{border-color:var(--bad)} .fb.ok{border-color:var(--ok)} .fb.good{border-color:var(--good)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+footer{text-align:center;font-size:.8rem;color:var(--muted);padding:1rem}
+.ic{vertical-align:-3px;flex:none}
+li.il{display:flex;gap:.6rem;align-items:flex-start;list-style:none;margin:.45rem 0}
+li.il .ic{color:var(--teal);margin-top:.15rem}
+.card ul:has(li.il){padding-left:0}
+.rubric .ic{color:var(--rose);margin-bottom:.2rem}
+.jordan{background:linear-gradient(#fff,#f7f3fb)!important;padding:1rem .7rem!important}
+.av{width:96px;height:96px;margin:0 auto;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#efe9f7,#fbeef2);box-shadow:0 0 0 5px #fff,0 0 0 9px var(--ring);transition:box-shadow .3s}
+.av img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.av span{font-family:"DM Serif Display",Georgia,serif;font-size:2.2rem;color:var(--navy)}
+.mood{display:flex;gap:.35rem;align-items:center;justify-content:center;margin-top:.9rem!important}
+.dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block}
+ul.plain{list-style:none;padding:0}ul.plain li{margin:.5rem 0}
+.found,.missed{display:inline-flex;gap:.25rem;align-items:center;font-weight:700;font-size:.85rem;padding:.05rem .45rem;border-radius:4px}
+.found{color:var(--good);background:#e1f2e7}.missed{color:var(--bad);background:#f9e0de}
+.drawer .tabs button{display:inline-flex;gap:.3rem;align-items:center}
+.hero{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.hero img{display:block;width:100%;height:auto}
+.hero-t{position:absolute;left:4%;top:50%;transform:translateY(-50%);max-width:34%}
+.hero-t span{display:block;font-size:.72rem;font-weight:700;letter-spacing:.18em;color:var(--rose)}
+.hero-t strong{display:block;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:2.2rem;color:var(--navy);line-height:1.1;margin:.2rem 0}
+.hero-t em{font-style:normal;font-size:.85rem;color:var(--muted)}
+@media (max-width:620px){.hero-t strong{font-size:1.3rem}.hero-t em,.hero-t span{font-size:.65rem}}
+.scene{position:relative;height:250px;border-radius:14px;overflow:hidden;background:url(img/meeting-room.webp) center 60%/cover;border:1px solid var(--line);margin-bottom:1rem}
+.scene .jordan{position:absolute;right:9%;bottom:18px;width:170px;background:rgba(255,255,255,.88)!important;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.9)!important;box-shadow:0 6px 18px rgba(45,33,72,.18)}
+@media (max-width:620px){.scene{height:200px}.scene .jordan{right:4%;width:140px}.av{width:70px!important;height:70px!important}}
+.convo1 .log{max-height:360px}
+.hero.sm .hero-t{max-width:30%}.hero.sm .hero-t strong{font-size:1.6rem}
+/* stage chips */
+.stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
+.st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
+/* key figures */
+.kf{background:#fff;border-bottom:1px solid var(--line);padding:.35rem 1.1rem;position:sticky;top:var(--hh,64px);z-index:15}
+.kf-in{max-width:1100px;margin:0 auto;display:flex;gap:.5rem;flex-wrap:wrap;align-items:stretch}
+.kf h2{font-family:Inter,sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0;align-self:center;font-weight:700}
+.kpi{flex:1 1 auto;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:6px;padding:.2rem .5rem;font-size:.72rem;background:#fff;line-height:1.35}
+.kpi b{display:block;font-size:.82rem;color:var(--navy);white-space:nowrap}
+.kpi .cmp{color:var(--muted)}
+.kpi.alert{border-left-color:var(--rose);background:var(--rose-l)}
+.hdrbtns{display:flex;gap:.4rem}
+.ts button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:6px;padding:.4rem .55rem;cursor:pointer;font-weight:700}
+.rubric{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.rubric div{background:var(--teal-l);border-radius:8px;padding:.5rem .6rem;font-size:.85rem}
+.rubric b{display:block;color:var(--navy)}
+.meter{height:12px;background:#eee;border-radius:99px;overflow:hidden;margin:.4rem 0}
+.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--rose))}
+.conf{display:flex;gap:.4rem;flex-wrap:wrap}
+.conf label{border:1px solid var(--line);border-radius:8px;padding:.4rem .7rem;cursor:pointer;background:#fff}
+@media print{header.top,.proto,.row,.filesbtn,.drawer,.kf{display:none!important} body{background:#fff}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="brand"><img src="img/lumera-logo-h.webp" alt="Lumera" height="40" style="height:40px;width:auto"><small style="border-left:1px solid rgba(255,255,255,.35);padding-left:.7rem">Manager Simulation</small></div>
+  <ol class="progress" id="progress" aria-label="Simulation stages"></ol>
+  <div class="hdrbtns"><span class="ts"><button id="tsDown" aria-label="Smaller text">A−</button> <button id="tsUp" aria-label="Larger text">A+</button></span><button class="filesbtn" id="kfBtn" aria-controls="kf" aria-expanded="true">Key figures</button><button class="filesbtn" id="filesBtn" aria-controls="drawer" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg> Files</button></div>
+</header>
+<div class="proto" role="note">Prototype for the MDOE407 group project (Managing Underperformance: Effective Performance Conversations for New Managers). Fictional company, people and data. Scoring is illustrative.</div>
+<section class="kf" id="kf" aria-labelledby="kfh" hidden><div class="kf-in"><h2 id="kfh">Jordan · Q1 → Q3</h2>
+<div class="kpi"><b>Close rate 33 → 25 → 17%</b><span class="cmp">Team Q3 27% · Target 30%</span></div>
+<div class="kpi"><b>Financing approval 80 → 62 → 40%</b><span class="cmp">Team 84 → 80 → 76%</span></div>
+<div class="kpi"><b>Avg discount 6 → 9 → 13%</b><span class="cmp">Team 8% · Limit ≤10%</span></div>
+<div class="kpi"><b>Demos 18 → 16</b><span class="cmp">Team Q3 17</span></div><div class="kpi"><b>Proposals 12 → 11</b><span class="cmp">Team Q3 12</span></div>
+<div class="kpi"><b>Quota 102 → 81 → 64%</b><span class="cmp">Team Q3 91%</span></div></div></section>
+<main id="main" tabindex="-1"></main>
+<div id="live" class="sr" aria-live="polite"></div>
+
+<aside class="drawer" id="drawer" role="dialog" aria-modal="false" aria-labelledby="drawerTitle" hidden>
+  <header><strong id="drawerTitle">Case files</strong><button id="closeFiles">Close files</button></header>
+  <div class="tabs" role="tablist" id="fileTabs"></div>
+  <div class="doc" id="fileDoc" role="tabpanel" tabindex="0"></div>
+</aside>
+<footer>PREPARE simulation prototype · MDOE407 · EHEI · Lindsey, Jezal &amp; Louis</footer>
+
+<script>
+/* ============ ICONS (original line set) ============ */
+const IC={
+ chart:'<path d="M4 20V4M4 20h16"/><path d="M7 15l4-4 3 3 5-6"/>',
+ team:'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M15 20c0-2.5 1.2-4.5 4-4.5 1.5 0 2 .3 2 .3"/>',
+ notes:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+ star:'<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>',
+ mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+ policy:'<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+ plan:'<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M9 2v4M15 2v4M8 11h8M8 15h5"/>',
+ search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',
+ ear:'<path d="M7 10a5 5 0 0110 0c0 3-3 3.5-3 6.5a2.5 2.5 0 01-5 0"/><path d="M10 10a2 2 0 014 0"/>',
+ bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-3.5 10.9c.8.6 1.5 1.6 1.5 2.6V17h4v-.5c0-1 .7-2 1.5-2.6A6 6 0 0012 3z"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ cycle:'<path d="M20 11a8 8 0 00-14.5-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0014.5 4.5L20 16"/><path d="M20 20v-4h-4"/>',
+ check:'<path d="M5 12l4 4 10-10"/>',
+ cross:'<path d="M6 6l12 12M18 6L6 18"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ kbd:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+ folder:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+ target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".5"/>'
+};
+function icon(n,sz=20,cls=""){return `<svg class="ic ${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`}
+const HERO=`<div class="hero"><img src="img/brief-banner.webp" alt="A manager and an employee talking across a small table in a bright meeting room at Lumera."><div class="hero-t"><span>CASE FILE · NORTH REGION</span><strong>Jordan Lee</strong><em>Sales representative · 3 years with Lumera</em></div></div>`;
+const ROOM=`<svg viewBox="0 0 150 70" aria-hidden="true" style="position:absolute;left:0;top:0;width:100%;height:auto;opacity:.9"><g fill="none" stroke="#c9bfd8" stroke-width="1.5" stroke-linecap="round"><rect x="10" y="8" width="40" height="30" rx="2"/><path d="M30 8v30M10 23h40"/><path d="M118 40c0-10 10-12 10-22 0 10 8 13 5 22z"/><path d="M119 40h14v18h-14z"/></g></svg>`;
+
+/* ============ DATA ============ */
+const STAGES=["Brief","Evidence","Plan the talk","Conversation","Recovery plan","Follow-up","Debrief"];
+
+const FILES={
+ scorecard:{t:"Scorecard",h:`<h3>Quarterly scorecard: Jordan Lee (North region)</h3>
+ <table><caption class="sr">Jordan's results Q1 to Q3 with team Q3 average and target</caption>
+ <thead><tr><th>Measure</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th><th class="num">Team Q3</th><th class="num">Target</th></tr></thead><tbody>
+ <tr><td>Quota attainment</td><td class="num">102%</td><td class="num">81%</td><td class="num">64%</td><td class="num">91%</td><td class="num">100%</td></tr>
+ <tr><td>Demonstrations</td><td class="num">18</td><td class="num">17</td><td class="num">16</td><td class="num">17</td><td class="num">–</td></tr>
+ <tr><td>Proposals issued</td><td class="num">12</td><td class="num">12</td><td class="num">11</td><td class="num">12</td><td class="num">–</td></tr>
+ <tr><td>Close rate</td><td class="num">33%</td><td class="num">25%</td><td class="num">17%</td><td class="num">27%</td><td class="num">30%</td></tr>
+ <tr><td>Financing approval rate</td><td class="num">80%</td><td class="num">62%</td><td class="num">40%</td><td class="num">76%</td><td class="num">–</td></tr>
+ <tr><td>Average discount (won deals)</td><td class="num">6%</td><td class="num">9%</td><td class="num">13%</td><td class="num">8%</td><td class="num">≤10%</td></tr>
+ </tbody></table><p class="hint">Note: new financing partner from the start of Q2.</p>`},
+ team:{t:"Team dashboard",h:`<h3>North team averages (8 representatives)</h3>
+ <table><thead><tr><th>Measure</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th></tr></thead><tbody>
+ <tr><td>Close rate</td><td class="num">31%</td><td class="num">29%</td><td class="num">27%</td></tr>
+ <tr><td>Financing approval rate</td><td class="num">84%</td><td class="num">80%</td><td class="num">76%</td></tr>
+ <tr><td>Average discount</td><td class="num">8%</td><td class="num">8%</td><td class="num">8%</td></tr>
+ </tbody></table>`},
+ crm:{t:"CRM notes",h:`<h3>CRM: recent lost or stalled deals (Jordan)</h3>
+ <table><thead><tr><th>Clinic</th><th>Stage lost</th><th>Note</th></tr></thead><tbody>
+ <tr><td>Bloom Skin Studio (sole practitioner, opened 2025)</td><td>Financing</td><td>Declined by finance partner. No further note.</td></tr>
+ <tr><td>Northgate Aesthetics (2 practitioners)</td><td>Financing</td><td>Declined. "Will try again next quarter."</td></tr>
+ <tr><td>Clear Contour Clinic</td><td>Close</td><td>Won after 15% discount. Approved second time.</td></tr>
+ <tr><td>Vale Laser &amp; Skin (sole practitioner)</td><td>Financing</td><td>Declined. Notes incomplete.</td></tr>
+ <tr><td>Harbour Medispa</td><td>Proposal</td><td>Client says no follow-up received after demo (2 weeks).</td></tr>
+ </tbody></table>`},
+ review:{t:"Last year's review",h:`<h3>Annual review extract (last year)</h3><p><strong>Overall:</strong> Exceeds expectations.</p>
+ <p>"Jordan is knowledgeable, professional and builds strong relationships with clinics. Consistently above target and well organised in CRM. A reliable member of the team."</p>`},
+ email:{t:"Colleague email",h:`<div class="email"><p><strong>From:</strong> Sam (North region)<br><strong>To:</strong> You<br><strong>Subject:</strong> Quick heads-up</p>
+ <p>Hi, just thought you should know Jordan seems disengaged lately. Not really joining in on team calls. Might be worth a chat. Sam</p></div>`},
+ policy:{t:"Policy extract",h:`<h3>Performance management policy (extract)</h3><ol>
+ <li>Managers address performance concerns informally first, through a documented performance conversation and support plan.</li>
+ <li>A formal Performance Improvement Plan (PIP) is used only where there is no sufficient improvement after a reasonable review period with agreed support.</li>
+ <li>HR must be consulted where health, disability, caring responsibilities affecting work, or formal action are involved.</li>
+ <li>Managers may not change targets, territories, pay or leave entitlements without approval.</li></ol>`},
+ planner:{t:"My planner",h:""}
+};
+
+const CAUSES={
+ c1:{n:"Not adapted pre-screening to the new financing criteria",hint:"Asking about the declined proposals and which clinics they were."},
+ c2:{n:"Using larger discounts to rescue deals",hint:"Paraphrasing Jordan's account accurately, so Jordan felt understood and said more."},
+ c3:{n:"Low confidence discussing alternative financing options",hint:"Asking whether the new criteria and options were clear (role clarity)."},
+ c4:{n:"Behind on CRM updates and follow-up",hint:"Following up when Jordan mentioned being behind."},
+ c5:{n:"Caring responsibilities at home affecting organisation",hint:"Picking up the cue 'it's been a lot lately' with an open, non-intrusive question."}
+};
+
+/* conversation graph */
+const CONVO={
+ open:{ j:null,mood:"neutral",dp:"DP3",crit:"Objectivity",
+  q:"Jordan sits down. How do you open the conversation?",
+  opts:[
+   {t:"\"Your numbers have been poor for a while now. What's going on?\"",s:0,mood:"defensive",
+    r:"It's not just me. It's the new financing partner. Everyone's struggling.",fb:"Vague and implies blame. Jordan hears a judgement, not evidence, and becomes defensive.",
+    better:"Open with specific evidence and the expected standard, then invite Jordan's view."},
+   {t:"\"Your close rate has moved from 33% to 17% over three quarters, against a 30% target. I'd like to understand what you're seeing before we decide anything. What's changed from your side?\"",s:2,mood:"open",
+    r:"Yeah... I know it's dropped. A lot of it is the new financing partner, honestly. Half my proposals are getting knocked back.",fb:"Strong: evidence, standard, gap, then an open question (Evidence → Standard → Gap → Inquiry)."},
+   {t:"\"I know the financing change has been hard on everyone, so please don't worry too much about the numbers.\"",s:0,mood:"neutral",
+    r:"Oh. Okay, thanks. Yes, it's been tough with the financing.",fb:"Kind, but it drops the expectation before you know the facts. Jordan now thinks the gap isn't important.",
+    better:"Acknowledge the context but still state the gap clearly against the standard."}
+  ], next:"probe1"},
+ probe1:{ j:"(Jordan's view of the financing problem)",dp:"DP4",crit:"Questioning",
+  q:"Jordan blames the financing partner. What do you do next?",
+  opts:[
+   {t:"\"Everyone has the same partner, and the rest of the team is managing.\"",s:0,mood:"defensive",
+    r:"Right. So it's my fault then.",fb:"Closes the conversation down. You may be right that context doesn't explain everything, but you haven't heard Jordan's account yet.",
+    better:"\"Talk me through the proposals that were declined. What kind of clinics were they?\""},
+   {t:"\"Talk me through the proposals that were declined. What kind of clinics were they?\"",s:2,mood:"open",unlock:"c1",
+    r:"Mostly the smaller independents, the sole practitioners and newer clinics. I've been sending them through the same way I always did. To be honest, I haven't really got my head round the new criteria.",fb:"Strong open question focused on the process. It surfaces a cause you can act on."},
+   {t:"\"OK, so it's mainly the financing. Let's move on to actions.\"",s:0,mood:"neutral",
+    r:"Sure.",fb:"Accepts the first explanation without testing it. The team's approval rate fell 8 points; Jordan's fell 40. Something else is going on.",
+    better:"Probe the explanation with an open question before planning."}
+  ], next:"probe2"},
+ probe2:{ dp:"DP4",crit:"Active listening",
+  q:"What do you say now?",
+  dyn:true,
+  opts:[
+   {t:"Paraphrase: \"So the clinics you've always worked with are now less likely to qualify, and your process hasn't changed to reflect that. Have I got that right?\"",s:2,mood:"open",unlock:"c2",needs:"c1",
+    r:"Yes, exactly. And when they get declined I've been... trying to rescue them with a bigger discount, so at least something closes. I know that's not ideal.",fb:"Accurate paraphrase. Jordan feels understood and volunteers more (the discounting)."},
+   {t:"\"Were the new criteria and the alternative financing options explained clearly to you?\"",s:1,mood:"open",unlock:"c3",
+    r:"There was a webinar, but it was quick. I'm not confident talking clinics through the alternatives, so I tend to avoid it.",fb:"A useful role-clarity question. It reveals a training need, though a paraphrase first would have shown you were listening.",
+    better:"Summarise what you've heard first, then ask."},
+   {t:"\"You should have read the criteria by now, Jordan.\"",s:0,mood:"defensive",
+    r:"I've had a lot on.",fb:"Judgemental and it shuts down information. Jordan stops explaining.",
+    better:"Reflect back what Jordan said and check your understanding."}
+  ], next:"cue"},
+ cue:{ dp:"DP4",crit:"Active listening",
+  jline:"It's been a lot lately, to be honest. I'm behind on my CRM notes as well.",
+  q:"Jordan says: \"It's been a lot lately, to be honest. I'm behind on my CRM notes as well.\" How do you respond?",
+  opts:[
+   {t:"\"You said it's been a lot lately. Would you like to say a bit more about that? Only share what you're comfortable with.\"",s:2,mood:"concerned",unlock:["c4","c5"],
+    r:"Someone in my family has been seriously ill, and I've been doing most of the caring in the evenings. Some days I'm just... behind. Follow-ups have slipped, and the CRM. I didn't want it to look like an excuse.",fb:"You picked up the cue respectfully, without probing. Jordan shares important context."},
+   {t:"\"Let's look at the CRM then. Which notes are behind?\"",s:1,mood:"neutral",unlock:"c4",
+    r:"A few. And some follow-ups after demos have slipped, which I know isn't good.",fb:"Task-focused and reasonable, but you missed the cue \"it's been a lot lately\". There is context you haven't heard.",
+    better:"\"You said it's been a lot lately. Would you like to say a bit more?\""},
+   {t:"\"The CRM is part of the job, Jordan. It needs to be up to date.\"",s:0,mood:"defensive",
+    r:"Understood.",fb:"True, but it closes the conversation at the point Jordan was about to explain. Cue missed.",
+    better:"Follow the cue with an open, non-intrusive question."}
+  ], next:"summary"},
+ summary:{type:"summary",dp:"DP4",next:"weigh"},
+ weigh:{ dp:"DP5",crit:"Professional judgement",
+  jline:"So really it's the financing change, isn't it? Can we agree that's the main thing?",
+  q:"Jordan asks: \"So really it's the financing change, isn't it? Can we agree that's the main thing?\"",
+  opts:[
+   {t:"\"The financing change is part of it, and I'll take that into account. The team's approval rate fell 8 points and yours fell 40, so let's also look at what's within your control.\"",s:2,mood:"open",
+    r:"That's fair. I can see that.",fb:"Weighs the explanation against the evidence: partly supported. You hold the expectation without dismissing the context."},
+   {t:"\"Yes, it's clearly the financing partner. I'll get your target reduced.\"",s:0,mood:"neutral",
+    r:"Really? That would help a lot.",fb:"The evidence only partly supports this, and changing targets is outside your authority (see policy).",
+    better:"Acknowledge the context, compare with the team data, and keep the expectation."},
+   {t:"\"No. The financing is an excuse.\"",s:0,mood:"defensive",
+    r:"It's not an excuse. It's real.",fb:"Dismisses a genuine factor that affects the whole team. Explanations should be weighed, not rejected.",
+    better:"Partly accept: it's real, but it doesn't explain the size of Jordan's drop."}
+  ], next:"disclose"},
+ disclose:{ dp:"DP5",crit:"Response to disclosure",needs:"c5",
+  q:"Jordan has told you about caring for a family member. How do you respond?",
+  opts:[
+   {t:"\"Thank you for telling me, and I'm sorry it's been so hard. You don't need to share more than you want to. I'll check with HR what support is available. The expectations stay, but let's make the plan realistic and I'll help.\"",s:2,mood:"open",
+    r:"Thanks. That actually helps. I'd rather sort this out than let it drift.",fb:"Respectful, follows policy (HR consulted), offers support and keeps accountability."},
+   {t:"\"Take whatever time off you need, and let's forget the targets for now.\"",s:0,mood:"neutral",
+    r:"Are you sure that's allowed?",fb:"Well meant, but you can't promise leave or drop targets (policy point 4), and it removes the expectation entirely.",
+    better:"Acknowledge, signpost support, consult HR, keep expectations realistic."},
+   {t:"\"I understand, but we need to stay focused on the numbers.\"",s:0,mood:"defensive",
+    r:"Right. Okay.",fb:"Dismissive. Policy says HR should be consulted when caring responsibilities affect work.",
+    better:"Acknowledge, signpost support and consult HR."}
+  ], next:"end"}
+};
+
+/* ============ STATE ============ */
+const S={stage:0,dp1:{},sort:{},plan:{},log:[],choices:[],causes:new Set(),missedCues:[],summary:"",sumCheck:[],actions:[],fu:{},node:"open",mood:"neutral"};
+const $=s=>document.querySelector(s);
+const main=$("#main");
+function say(t){$("#live").textContent=t}
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function progress(){
+  $("#progress").innerHTML=STAGES.map((s,i)=>`<li class="${i<S.stage?'done':i===S.stage?'now':''}" ${i===S.stage?'aria-current="step"':''}>${s}</li>`).join("");
+}
+const CHIP={P:["st-P","Pinpoint","target"],R:["st-R","Receive","ear"],E:["st-E","Examine","search"],PL:["st-PL","Plan","plan"],RE:["st-RE","Review · Escalate","cycle"]};
+function chip(k){const c=CHIP[k];return `<span class="stagechip ${c[0]}">${icon(c[2],14)} PREPARE · ${c[1]}</span>`}
+let kfOn=true;
+function syncKF(){const show=kfOn&&S.stage>=1&&S.stage<=5;$("#kf").hidden=!show;$("#kfBtn").setAttribute("aria-expanded",String(show));$("#kfBtn").textContent=kfOn?"Hide figures":"Key figures";document.documentElement.style.setProperty("--hh",$("header.top").offsetHeight+"px")}
+$("#kfBtn").onclick=()=>{kfOn=!kfOn;syncKF()};
+let fs=17;const setFs=d=>{fs=Math.min(22,Math.max(14,fs+d));document.documentElement.style.fontSize=fs+"px";syncKF()};
+$("#tsUp").onclick=()=>setFs(1);$("#tsDown").onclick=()=>setFs(-1);
+window.addEventListener("resize",syncKF);
+function save(){try{localStorage.setItem("jordanSim",JSON.stringify({...S,causes:[...S.causes]}))}catch(e){}}
+function go(n){S.stage=n;progress();syncKF();render();save();main.focus();window.scrollTo(0,0)}
+
+/* ============ FILES DRAWER ============ */
+let curFile="scorecard";
+function renderFiles(){
+  const FI={scorecard:"chart",team:"team",crm:"notes",review:"star",email:"mail",policy:"policy",planner:"plan"};
+  $("#fileTabs").innerHTML=Object.entries(FILES).map(([k,f])=>`<button role="tab" aria-selected="${k===curFile}" data-f="${k}">${icon(FI[k],16)} ${f.t}</button>`).join("");
+  let h=FILES[curFile].h;
+  if(curFile==="planner"){
+    const p=S.plan;
+    h=p.gap?`<h3>My conversation planner</h3><p><strong>Gap:</strong> ${esc(p.gap)}</p><p><strong>Evidence:</strong> ${esc(p.evidence)}</p><p><strong>Opening:</strong> ${esc(p.opening)}</p><p><strong>Questions:</strong> ${esc(p.questions)}</p><p><strong>Possible causes:</strong> ${esc(p.causes)}</p><p><strong>Support:</strong> ${esc(p.support)}</p>`:`<p class="muted">You haven't completed the planner yet.</p>`;
+  }
+  $("#fileDoc").innerHTML=h;
+}
+$("#fileTabs").addEventListener("click",e=>{const b=e.target.closest("button");if(b){curFile=b.dataset.f;renderFiles()}});
+function openFiles(){const d=$("#drawer");d.hidden=false;requestAnimationFrame(()=>d.classList.add("open"));$("#filesBtn").setAttribute("aria-expanded","true");renderFiles();$("#closeFiles").focus()}
+function closeFiles(){const d=$("#drawer");d.classList.remove("open");$("#filesBtn").setAttribute("aria-expanded","false");setTimeout(()=>d.hidden=true,200);$("#filesBtn").focus()}
+$("#filesBtn").onclick=()=>$("#drawer").classList.contains("open")?closeFiles():openFiles();
+$("#closeFiles").onclick=closeFiles;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#drawer").classList.contains("open"))closeFiles()});
+
+/* ============ FACE ============ */
+const PORTRAIT={neutral:"img/jordan-neutral.webp",open:"img/jordan-open.webp",defensive:"img/jordan-defensive.webp",concerned:"img/jordan-concerned.webp"}; // add open/defensive/concerned when ready
+function face(m){
+  const c={neutral:["#8a8299","Neutral"],open:["#2e7d4f","Open"],defensive:["#b3261e","Defensive"],concerned:["#8a5f00","Concerned"]}[m];
+  const src=PORTRAIT[m]||PORTRAIT.neutral;
+  return `<div class="av" style="--ring:${c[0]}" role="img" aria-label="Jordan, ${c[1].toLowerCase()}">${src?`<img src="${src}" alt="">`:`<span>JL</span>`}</div>
+  <div class="mood"><span class="dot" style="background:${c[0]}"></span>Jordan · ${c[1]}</div><div class="hint" style="font-size:.75rem">Sales rep, North</div>`;
+}
+
+
+/* ============ SCREENS ============ */
+function render(){
+  const f=[brief,dp1,dp2,convo,dp6,dp7,debrief][S.stage];
+  f();
+}
+
+function brief(){
+  main.innerHTML=`<span class="tag">Your brief</span>
+  <h1>The Jordan Conversation</h1>
+  ${HERO}
+  <div class="card"><p><strong>Your role.</strong> You are the new regional sales manager at Lumera Aesthetics. You joined from another region three months ago and manage eight sales representatives.</p>
+  <p><strong>The situation.</strong> Jordan Lee has been with Lumera for three years and has a strong track record. Over the last three quarters, Jordan's results have declined. You have booked a private 45-minute one-to-one. This is a performance conversation, not a disciplinary meeting.</p>
+  <p><strong>What you don't know yet:</strong> why the decline has happened.</p></div>
+  <h2>Your task</h2>
+  <ol><li>Establish what the evidence shows.</li><li>Understand Jordan's perspective.</li><li>Agree fair, practical next steps, including your own support.</li><li>Decide how progress will be reviewed, and when HR would be involved.</li></ol>
+  <div class="card"><h3 style="margin-top:0">Before you start</h3><ul>
+  <li class="il">${icon("folder")}<span>Open <strong>Files</strong> (top right) at any time. Opening a file never loses your answers.</span></li>
+  <li class="il">${icon("chat")}<span>There are no hints during the conversation. You'll get full feedback in the debrief.</span></li>
+  <li class="il">${icon("clock")}<span>About 30 minutes, no time limit. You can stop and resume later.</span></li>
+  <li class="il">${icon("kbd")}<span>Everything works with a keyboard. Use A− / A+ to change the text size.</span></li>
+  <li class="il">${icon("flag")}<span>Success does <em>not</em> mean starting a formal PIP. It means evidence, a fair hearing, proportionate support and a clear review.</span></li></ul></div>
+  <h2>How you'll be assessed</h2><p class="muted">Five pieces of evidence, each judged as Proficient, Developing or Not yet.</p>
+  <div class="rubric"><div>${icon("target")}<b>S1 Preparation</b>Reading the evidence and planning the talk</div><div>${icon("chat")}<b>S2 Conversation</b>Objectivity, questioning, listening, judgement</div><div>${icon("ear")}<b>S3 Summary</b>An accurate summarise-back</div><div>${icon("plan")}<b>S4 Actions</b>SMART, linked to causes, with your support</div><div>${icon("cycle")}<b>S5 Follow-up</b>Monitoring, review and fair escalation</div></div>
+  <div class="row"><button class="btn" id="start">Start: review the evidence</button><button class="btn sec" id="peek">Open the files</button>${hasSave()?'<button class="btn sec" id="resume">Resume where I left off</button>':''}</div>`;
+  $("#start").onclick=()=>{S.dp1={};S.sort={};S.plan={};S.log=[];S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";go(1)}; $("#peek").onclick=openFiles;
+  if($("#resume"))$("#resume").onclick=resume;
+}
+
+const SORT=[
+ {id:"s1",t:"Jordan's close rate fell from 33% to 17% across three quarters.",a:"evidence"},
+ {id:"s2",t:"Jordan seems disengaged lately.",a:"assumption"},
+ {id:"s3",t:"Jordan's financing approval fell from 80% to 40%; the team's fell from 84% to 76%.",a:"evidence"},
+ {id:"s4",t:"Jordan has lost motivation since the financing change.",a:"assumption"},
+ {id:"s5",t:"Why three recent declined proposals were all small clinics.",a:"investigate"},
+ {id:"s6",t:"Why two clinics report slow follow-up after demos.",a:"investigate"},
+ {id:"s7",t:"Demos and proposals have stayed broadly steady (18 → 16; 12 → 11).",a:"evidence"}
+];
+function dp1(){
+  main.innerHTML=`<span class="tag">Decision point 1</span>${chip("P")}
+  <h1>What does the evidence show?</h1><p>Use the Files to review Jordan's scorecard, the team dashboard, CRM notes, last year's review and the colleague email.</p>
+  <div class="row" style="margin-top:0"><button class="btn sec" id="peek">Open the files</button></div>
+  <fieldset><legend>1. How would you classify Jordan's performance?</legend>
+   ${[["sustained","Sustained underperformance"],["isolated","An isolated dip"],["insufficient","Not enough evidence to say"]].map(([v,l])=>`<label class="opt"><input type="radio" name="cls" value="${v}" ${S.dp1.cls===v?"checked":""}>${l}</label>`).join("")}
+  </fieldset>
+  <fieldset><legend>2. Where in the sales process is the main gap?</legend>
+   ${[["top","Prospecting and demos (top of the funnel)"],["late","Financing and closing (late in the funnel)"],["all","Evenly across every stage"]].map(([v,l])=>`<label class="opt"><input type="radio" name="stage" value="${v}" ${S.dp1.stage===v?"checked":""}>${l}</label>`).join("")}
+  </fieldset>
+  <fieldset><legend>3. Sort each statement</legend><p class="hint">Evidence = verified fact. Assumption = interpretation or opinion. Investigate = something to ask about.</p>
+  <div class="sortgrid">${SORT.map(s=>`<div class="sortitem"><span id="l${s.id}">${s.t}</span>
+   <select aria-labelledby="l${s.id}" data-s="${s.id}"><option value="">Choose…</option>
+   ${["evidence","assumption","investigate"].map(o=>`<option value="${o}" ${S.sort[s.id]===o?"selected":""}>${o[0].toUpperCase()+o.slice(1)}</option>`).join("")}</select></div>`).join("")}</div></fieldset>
+  <div class="row"><button class="btn" id="next" disabled>Continue to planning</button><span class="hint" id="need"></span></div>`;
+  $("#peek").onclick=openFiles;
+  const check=()=>{const done=S.dp1.cls&&S.dp1.stage&&SORT.every(s=>S.sort[s.id]);$("#next").disabled=!done;$("#need").textContent=done?"":"Answer all three parts to continue."};
+  main.querySelectorAll("input[name=cls]").forEach(r=>r.onchange=()=>{S.dp1.cls=r.value;check()});
+  main.querySelectorAll("input[name=stage]").forEach(r=>r.onchange=()=>{S.dp1.stage=r.value;check()});
+  main.querySelectorAll("select[data-s]").forEach(s=>s.onchange=()=>{S.sort[s.dataset.s]=s.value;check()});
+  check(); $("#next").onclick=()=>go(2);
+}
+
+function dp2(){
+  const p=S.plan;
+  const F=(k,l,h,ta=true)=>`<div class="field"><label for="p_${k}">${l}</label>${h?`<div class="hint" id="h_${k}">${h}</div>`:""}${ta?`<textarea id="p_${k}" data-k="${k}" ${h?`aria-describedby="h_${k}"`:""}>${esc(p[k])}</textarea>`:`<input type="text" id="p_${k}" data-k="${k}" value="${esc(p[k])}">`}</div>`;
+  main.innerHTML=`<span class="tag">Decision point 2</span>${chip("P")}
+  <h1>Prepare your conversation plan</h1><p>This is the same planner you used for Sam in Module 2. It will be saved in your Files as "My planner".</p>
+  <div class="card">
+  ${F("gap","1. The gap in one fact-based sentence","Include the measure, the trend and the standard. No personality words.",false)}
+  ${F("evidence","2. Three pieces of evidence you'll refer to")}
+  ${F("opening","3. Your opening line","Evidence → Standard → Gap → Question")}
+  ${F("questions","4. Open questions you'll ask")}
+  ${F("causes","5. Possible causes to explore (Ability / Motivation / Opportunity)")}
+  ${F("support","6. Support you could offer")}
+  <fieldset><legend>7. Policy points to check</legend>
+   ${[["inf","Informal stage first"],["hr","HR if health, disability or caring responsibilities"],["tgt","I can't change targets or promise leave"]].map(([v,l])=>`<label class="opt"><input type="checkbox" data-pol="${v}" ${(p.pol||[]).includes(v)?"checked":""}>${l}</label>`).join("")}
+  </fieldset></div>
+  <div class="row"><button class="btn" id="next" disabled>Go into the meeting</button><span class="hint" id="need"></span></div>`;
+  const check=()=>{const ok=["gap","evidence","opening","questions"].every(k=>(p[k]||"").trim().length>5);$("#next").disabled=!ok;$("#need").textContent=ok?"":"Complete at least boxes 1 to 4."};
+  main.querySelectorAll("[data-k]").forEach(el=>el.oninput=()=>{p[el.dataset.k]=el.value;check()});
+  main.querySelectorAll("[data-pol]").forEach(el=>el.onchange=()=>{p.pol=[...main.querySelectorAll("[data-pol]:checked")].map(x=>x.dataset.pol)});
+  check(); $("#next").onclick=()=>{S.node="open";S.log=[{w:"note",t:"The meeting room. Jordan arrives on time and sits down."}];go(3)};
+}
+
+/* conversation */
+function convo(){
+  const n=CONVO[S.node];
+  if(S.node==="end"){S.log.push({w:"note",t:"The conversation ends. You agree to send Jordan a written plan."});return go(4)}
+  if(n.needs&&!S.causes.has(n.needs)){ // skip disclosure node if not revealed
+    S.missedCues.push("disclosure");S.node=n.next;return convo();
+  }
+  if(n.type==="summary") return summaryScreen();
+  let opts=n.opts.filter(o=>!o.needs||S.causes.has(o.needs));
+  if(n.jline&&!S.log.some(l=>l.t===n.jline)) S.log.push({w:"j",t:n.jline});
+  main.innerHTML=`<span class="tag">${n.dp} · Conversation</span>${chip(n.dp==="DP3"?"R":n.dp==="DP4"?"R":"E")}
+  <h1>Your one-to-one with Jordan</h1>
+  <div class="scene" role="img" aria-label="Meeting room. ${S.mood==="neutral"?"Jordan sits opposite you.":"Jordan looks "+S.mood+"."}"><div class="jordan">${face(S.mood)}</div></div>
+  <div class="convo1"><div><div class="log" id="log" aria-label="Conversation so far">${S.log.map(l=>l.w==="note"?`<div class="msg note">${esc(l.t)}</div>`:`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Jordan":"You"}</span>${esc(l.t)}</div>`).join("")}</div>
+  <fieldset><legend>${esc(n.q)}</legend>
+  ${opts.map((o,i)=>`<label class="opt"><input type="radio" name="c" value="${i}">${esc(o.t)}</label>`).join("")}</fieldset>
+  <div class="row"><button class="btn" id="say" disabled>Say this</button></div></div></div>`;
+  const lg=$("#log");lg.scrollTop=lg.scrollHeight;
+  let pick=null;main.querySelectorAll("input[name=c]").forEach(r=>r.onchange=()=>{pick=opts[+r.value];$("#say").disabled=false});
+  $("#say").onclick=()=>{
+    S.log.push({w:"m",t:pick.t.replace(/^Paraphrase: /,"")});S.log.push({w:"j",t:pick.r});
+    S.mood=pick.mood;
+    [].concat(pick.unlock||[]).forEach(c=>S.causes.add(c));
+    S.choices.push({dp:n.dp,crit:n.crit,q:n.q,o:pick,all:opts});
+    say("Jordan replies: "+pick.r);
+    S.node=n.next;save();convo();
+  };
+}
+
+function summaryScreen(){
+  main.innerHTML=`<span class="tag">DP4 · Summarise-back</span>${chip("R")}
+  <h1>Summarise what Jordan has told you</h1>
+  <div class="scene" role="img" aria-label="Meeting room with Jordan"><div class="jordan">${face(S.mood)}</div></div>
+  <div class="convo1"><div>
+  <div class="card"><p>Before moving on, you say you want to check you've understood. In 2–4 sentences, write the summary you would say back to Jordan. Include only what Jordan has actually told you.</p>
+  <div class="field"><label for="sum">Your summary to Jordan</label><textarea id="sum">${esc(S.summary)}</textarea></div>
+  <button class="btn sec" id="peekLog">Show the conversation so far</button><div id="logbox"></div></div>
+  <div class="row"><button class="btn" id="next" disabled>Say this summary</button></div></div></div>`;
+  $("#sum").oninput=e=>{S.summary=e.target.value;$("#next").disabled=S.summary.trim().length<20};
+  $("#peekLog").onclick=()=>{$("#logbox").innerHTML=`<div class="log">${S.log.filter(l=>l.w!=="note").map(l=>`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Jordan":"You"}</span>${esc(l.t)}</div>`).join("")}</div>`};
+  $("#next").disabled=S.summary.trim().length<20;
+  $("#next").onclick=()=>{
+    S.log.push({w:"m",t:S.summary});
+    const reply=S.causes.size>=3?"Yes, that's it. Thanks for actually listening.":"Mostly, yes.";
+    S.log.push({w:"j",t:reply});S.node="weigh";
+    if(S.causes.has("c5"))S.mood="open";
+    convo();
+  };
+}
+
+function dp6(){
+  const opts=[...S.causes].map(c=>`<option value="${c}">${CAUSES[c].n}</option>`).join("")+`<option value="gen">General performance (close rate)</option>`;
+  if(!S.actions.length)S.actions=[{},{}];
+  main.innerHTML=`<span class="tag">Decision point 6</span>${chip("PL")}
+  <h1>Write Jordan's recovery actions</h1>
+  <p>Based on what you found out, write two or three SMART actions. Each one should link to a cause and say what <strong>you</strong> will do to support Jordan.</p>
+  <div class="card"><h3 style="margin-top:0">What you found out</h3>${S.causes.size?`<ul>${[...S.causes].map(c=>`<li>${CAUSES[c].n}</li>`).join("")}</ul>`:`<p class="muted">You didn't uncover specific causes. Plan from the scorecard evidence.</p>`}</div>
+  <div id="acts"></div>
+  <div class="row"><button class="btn sec" id="add">Add another action</button><button class="btn" id="next" disabled>Continue to follow-up</button><span class="hint" id="need"></span></div>`;
+  const draw=()=>{$("#acts").innerHTML=S.actions.map((a,i)=>`<fieldset><legend>Action ${i+1}</legend>
+   <div class="field"><label for="ac${i}">Links to cause</label><select id="ac${i}" data-i="${i}" data-f="cause"><option value="">Choose…</option>${opts}</select></div>
+   <div class="field"><label for="aa${i}">What Jordan will do (specific)</label><input type="text" id="aa${i}" data-i="${i}" data-f="what" value="${esc(a.what)}"></div>
+   <div class="field"><label for="am${i}">How it will be measured</label><input type="text" id="am${i}" data-i="${i}" data-f="measure" value="${esc(a.measure)}"></div>
+   <div class="field"><label for="at${i}">By when</label><input type="text" id="at${i}" data-i="${i}" data-f="when" value="${esc(a.when)}" placeholder="e.g. within 2 weeks"></div>
+   <div class="field"><label for="as${i}">Your support as manager</label><input type="text" id="as${i}" data-i="${i}" data-f="support" value="${esc(a.support)}"></div></fieldset>`).join("");
+   S.actions.forEach((a,i)=>{if(a.cause)$("#ac"+i).value=a.cause});
+   main.querySelectorAll("[data-f]").forEach(el=>el.oninput=el.onchange=()=>{S.actions[+el.dataset.i][el.dataset.f]=el.value;check()});check()};
+  const check=()=>{const ok=S.actions.filter(a=>a.what&&a.measure&&a.when).length>=2;$("#next").disabled=!ok;$("#need").textContent=ok?"":"Complete at least two actions (what, measure, when)."};
+  $("#add").onclick=()=>{if(S.actions.length<3){S.actions.push({});draw()}};
+  draw(); $("#next").onclick=()=>go(5);
+}
+
+function dp7(){
+  const f=S.fu;
+  const LEAD=[["calls","Quality of financing conversations (observed on joint visits)",1],["prescreen","Proposals pre-screened against the financing criteria",1],["crm","CRM updated within 48 hours of each contact",1],["quota","Quarterly quota attainment",0]];
+  const ESC=[["e1","If there's no improvement in the agreed actions after support has been given and two reviews held, consult HR about next steps.",1],
+   ["e2","If caring responsibilities or health start to affect Jordan's work further, consult HR about support or adjustments.",1],
+   ["e3","If the Q4 close rate is below 30%, start a formal PIP.",0],["e4","If Jordan misses one check-in, escalate to HR.",0]];
+  main.innerHTML=`<span class="tag">Decision point 7</span>${chip("RE")}
+  <h1>Plan the follow-up</h1>
+  <fieldset><legend>1. Which leading indicators will you monitor? (choose all that apply)</legend><p class="hint">Leading indicators are behaviours that change quickly. Lagging indicators are results.</p>
+  ${LEAD.map(([v,l])=>`<label class="opt"><input type="checkbox" data-lead="${v}" ${(f.lead||[]).includes(v)?"checked":""}>${l}</label>`).join("")}</fieldset>
+  <div class="card">
+  <div class="field"><label for="lag">2. Lagging result you'll track</label><select id="lag"><option value="">Choose…</option><option value="close">Close rate moving towards 30%</option><option value="att">Attendance at team calls</option></select></div>
+  <div class="field"><label for="freq">3. Check-in frequency</label><select id="freq"><option value="">Choose…</option><option value="weekly">Weekly 20-minute check-in</option><option value="fortnightly">Every two weeks</option><option value="quarter">At the end of the quarter</option></select></div>
+  <div class="field"><label for="rev">4. Formal review date</label><select id="rev"><option value="">Choose…</option><option value="2">In 2 weeks</option><option value="6">In 6 weeks</option><option value="26">In 6 months</option></select></div>
+  <div class="field"><label for="succ">5. What will success look like at the review?</label><textarea id="succ">${esc(f.succ)}</textarea></div></div>
+  <fieldset><legend>6. When would you involve HR? (choose all that apply)</legend>
+  ${ESC.map(([v,l])=>`<label class="opt"><input type="checkbox" data-esc="${v}" ${(f.esc||[]).includes(v)?"checked":""}>${l}</label>`).join("")}</fieldset>
+  <fieldset><legend>7. Before you see your results: how well do you think the conversation went?</legend><div class="conf">
+  ${[1,2,3,4,5].map(v=>`<label><input type="radio" name="conf" value="${v}" ${f.conf==v?"checked":""}> ${["","Poorly","Not great","OK","Well","Very well"][v]}</label>`).join("")}</div></fieldset>
+  <div class="row"><button class="btn" id="next" disabled>Finish and see your debrief</button><span class="hint" id="need"></span></div>`;
+  main.querySelectorAll("input[name=conf]").forEach(r=>r.onchange=()=>{f.conf=+r.value;check()});
+  ["lag","freq","rev"].forEach(k=>{if(f[k])$("#"+k).value=f[k];$("#"+k).onchange=e=>{f[k]=e.target.value;check()}});
+  $("#succ").oninput=e=>{f.succ=e.target.value;check()};
+  main.querySelectorAll("[data-lead]").forEach(el=>el.onchange=()=>{f.lead=[...main.querySelectorAll("[data-lead]:checked")].map(x=>x.dataset.lead);check()});
+  main.querySelectorAll("[data-esc]").forEach(el=>el.onchange=()=>{f.esc=[...main.querySelectorAll("[data-esc]:checked")].map(x=>x.dataset.esc);check()});
+  const check=()=>{const ok=f.lag&&f.freq&&f.rev&&(f.succ||"").trim().length>5&&(f.lead||[]).length&&(f.esc||[]).length&&f.conf;$("#next").disabled=!ok;$("#need").textContent=ok?"":"Complete all seven parts."};
+  check(); $("#next").onclick=()=>go(6);
+  dp7.LEAD=LEAD;dp7.ESC=ESC;
+}
+
+/* ============ SCORING ============ */
+function lvl(score,max){const r=score/max;return r>=.8?"P":r>=.5?"D":"N"}
+const LV={P:"Proficient",D:"Developing",N:"Not yet"};
+function scoreAll(){
+  const out={};
+  // S1
+  let s1=0,f1=[];
+  if(S.dp1.cls==="sustained")s1+=2;else f1.push("Three consecutive quarters of decline, well below the team and the 30% target, is a sustained pattern, not an isolated dip.");
+  if(S.dp1.stage==="late")s1+=2;else f1.push("Demos and proposals are steady; the drop is at financing and closing (late funnel).");
+  const sortOK=SORT.filter(s=>S.sort[s.id]===s.a).length;s1+=sortOK*(3/SORT.length);
+  SORT.forEach(s=>{if(S.sort[s.id]!==s.a)f1.push(`"${s.t}" is best treated as <strong>${s.a}</strong>.`)});
+  const gap=(S.plan.gap||"").toLowerCase();
+  const hasNum=/\d/.test(gap),persona=/(lazy|disengag|attitude|motivat|careless|not trying)/.test(gap);
+  if(hasNum&&!persona)s1+=2;else f1.push(persona?"Your gap statement includes a judgement about Jordan as a person. Keep it to the measure, trend and standard.":"Your gap statement should include figures, e.g. \"Close rate fell from 33% to 17% over three quarters against a 30% target.\"");
+  if(S.plan.support&&S.plan.support.trim().length>5)s1+=1;else f1.push("Plan the support you could offer before the meeting.");
+  out.S1={n:"S1 Preparation (LO1–LO3)",l:lvl(s1,10),fb:f1};
+  // S2
+  const cs=S.choices,s2=cs.reduce((a,c)=>a+c.o.s,0),m2=cs.length*2;
+  out.S2={n:"S2 Conversation choices (LO4–LO5)",l:lvl(s2,m2),fb:cs.filter(c=>c.o.s<2).map(c=>`<strong>${c.dp} (${c.crit}):</strong> ${c.o.fb} ${c.o.better?`<br><em>Stronger:</em> ${esc(c.o.better)}`:""}`)};
+  // S3 summary heuristic
+  const t=S.summary.toLowerCase();const hits=[];let s3=0;
+  if(/financ|criteria|approv/.test(t)){s3++;hits.push("financing")}
+  if(S.causes.has("c1")&&/small|clinic|screen|qualif/.test(t)){s3++;hits.push("small clinics / pre-screening")}
+  if(S.causes.has("c2")&&/discount/.test(t)){s3++;hits.push("discounting")}
+  if(S.causes.has("c4")&&/crm|follow/.test(t)){s3++;hits.push("CRM / follow-up")}
+  if(S.causes.has("c5")&&/(caring|care|home|family|ill)/.test(t)){s3++;hits.push("personal context")}
+  const max3=1+["c1","c2","c4","c5"].filter(c=>S.causes.has(c)).length;
+  const added=/(lazy|disengag|attitude|not motivated|excuse)/.test(t);
+  if(added)s3=Math.max(0,s3-1);
+  out.S3={n:"S3 Summarise-back (LO4–LO5)",l:lvl(s3,max3),fb:[`Your summary covered: ${hits.length?hits.join(", "):"none of the main points"}.`].concat(added?["It adds an interpretation Jordan didn't give (e.g. \"disengaged\" or \"excuse\")."]:[]).concat(["<em>Model:</em> \"So the new financing criteria mean the smaller clinics you've always worked with are being declined, and you've been using discounts to rescue some deals. You're also behind on CRM and follow-up while you're caring for a family member. Have I got that right?\""]),note:"Automatic check only. In the full course a tutor reviews free text."};
+  // S4
+  let s4=0,f4=[];const A=S.actions.filter(a=>a.what);
+  A.forEach((a,i)=>{let k=0;if(a.cause&&a.cause!=="gen")k++;else f4.push(`Action ${i+1}: link it to a specific cause you uncovered.`);
+   if(/\d/.test(a.measure||""))k++;else f4.push(`Action ${i+1}: make the measure numeric (e.g. "8 of 10 proposals pre-screened").`);
+   if((a.when||"").trim())k++;
+   if((a.support||"").trim().length>5)k++;else f4.push(`Action ${i+1}: say what you, the manager, will do.`);s4+=k});
+  out.S4={n:"S4 SMART action plan (LO6)",l:lvl(s4,Math.max(A.length,2)*4),fb:f4.length?f4:["Actions are specific, measured, time-bound and supported."]};
+  // S5
+  const f=S.fu;let s5=0,f5=[];
+  const lead=f.lead||[];if(lead.includes("quota")){f5.push("Quota attainment is a lagging result, not a leading indicator.")}else s5++;
+  if(lead.filter(x=>x!=="quota").length>=2)s5++;else f5.push("Track at least two leading behaviours.");
+  if(f.lag==="close")s5++;else f5.push("Track the close rate as the lagging result; attendance at calls isn't linked to the gap.");
+  if(f.freq==="weekly"||f.freq==="fortnightly")s5++;else f5.push("Quarterly check-ins are too infrequent for a recovery plan.");
+  if(f.rev==="6")s5++;else f5.push(f.rev==="2"?"Two weeks is too soon for results to change after a 1–3 month sales cycle.":"Six months is too long to leave without a formal review.");
+  const e=f.esc||[];if(e.includes("e1")&&e.includes("e2"))s5++;else f5.push("Include HR involvement after reasonable support and review, and where caring or health issues affect work.");
+  if(e.includes("e3")||e.includes("e4")){s5--;f5.push("Escalating after one missed result or one missed check-in is premature (see policy point 2).")}
+  out.S5={n:"S5 Follow-up plan (LO7)",l:lvl(Math.max(0,s5),6),fb:f5.length?f5:["Proportionate monitoring, review and escalation."]};
+  return out;
+}
+
+function debrief(){
+  const r=scoreAll();
+  const missed=Object.keys(CAUSES).filter(c=>!S.causes.has(c));
+  main.innerHTML=`<div class="hero sm" style="margin-top:.4rem"><img src="img/debrief-banner.webp" alt="The manager alone at the meeting table after the conversation, writing notes and reflecting."><div class="hero-t"><span>DEBRIEF</span><strong>How did the conversation go?</strong><em>Your results, what you missed, and what to try next time</em></div></div>
+  <div class="card"><h2 style="margin-top:0">Your results by evidence component</h2>
+  <table><thead><tr><th>Evidence</th><th>Level</th></tr></thead><tbody>${Object.values(r).map(x=>`<tr><td>${x.n}</td><td><span class="lvl ${x.l}">${LV[x.l]}</span></td></tr>`).join("")}</tbody></table>
+  <p class="hint">Levels: Proficient · Developing · Not yet. Prototype scoring; free text would be tutor-reviewed in the full course.</p></div>
+  <div class="card"><h2 style="margin-top:0">What Jordan's situation actually was</h2>
+  <p>You uncovered <strong>${S.causes.size} of 5</strong> contributing factors.</p><div class="meter" role="img" aria-label="${S.causes.size} of 5 factors found"><span style="width:${S.causes.size*20}%"></span></div>
+  <ul class="plain">${Object.entries(CAUSES).map(([k,c])=>`<li>${S.causes.has(k)?`<span class="found">${icon("check",16)} Found</span>`:`<span class="missed">${icon("cross",16)} Missed</span>`} ${c.n}${S.causes.has(k)?"":`<br><span class="hint">How to uncover it: ${c.hint}</span>`}</li>`).join("")}</ul>
+  <p>The financing change was real and affected the whole team, but it explained only part of Jordan's drop. This called for support and recovery, not a formal PIP.</p></div>
+  ${(()=>{const ls=Object.values(r).map(x=>x.l);const pts=ls.reduce((a,l)=>a+(l==="P"?2:l==="D"?1:0),0);const actual=pts>=8?4:pts>=6?3:pts>=4?2:1;const c=S.fu.conf||3;const gap=c-1-actual;return `<div class="card"><h3 style="margin-top:0">Your self-assessment</h3><p>You rated the conversation: <strong>${["","Poorly","Not great","OK","Well","Very well"][c]}</strong>. ${gap>0?"Your results suggest it went less well than you thought. Look closely at the missed cues below.":gap<0?"You did better than you expected. Notice which choices worked, so you can repeat them.":"Your self-assessment matches your results closely."}</p></div>`})()}
+  <h2>Your path through the conversation</h2>
+  ${S.choices.map(c=>`<div class="fb ${c.o.s===2?"good":c.o.s===1?"ok":"bad"}"><strong>${c.dp} · ${c.crit}:</strong> ${c.o.s===2?"Best":c.o.s===1?"Acceptable":"Problematic"}<br>You said: ${esc(c.o.t.replace(/^Paraphrase: /,""))}<br><span class="muted">${c.o.fb}</span>${c.o.better?`<br><em>Stronger:</em> ${esc(c.o.better)}`:""}</div>`).join("")}
+  <h2>Feedback by component</h2>
+  ${Object.values(r).map(x=>`<div class="card"><h3 style="margin-top:0">${x.n} <span class="lvl ${x.l}">${LV[x.l]}</span></h3>${x.fb.length?`<ul>${x.fb.map(f=>`<li>${f}</li>`).join("")}</ul>`:"<p>No issues.</p>"}${x.note?`<p class="hint">${x.note}</p>`:""}</div>`).join("")}
+  <div class="card"><h3 style="margin-top:0">Fairness check</h3><ul><li>Was the standard clear? (30% close rate, stated with evidence)</li><li>Was Jordan genuinely heard?</li><li>Is every decision based on evidence rather than assumption?</li></ul></div>
+  <div class="card"><h3 style="margin-top:0">Reflect before you leave</h3><div class="field"><label for="refl">What is one thing you'll do differently in a real performance conversation?</label><textarea id="refl"></textarea></div><p class="hint">Your reflection stays on this device. Take the PREPARE job aid back to your team.</p></div>
+  <div class="row"><button class="btn" id="print">Print or save as PDF</button><button class="btn sec" id="again">Try again</button></div>`;
+  $("#print").onclick=()=>{try{window.print()}catch(e){}};
+  $("#again").onclick=()=>{try{localStorage.removeItem("jordanSim")}catch(e){}location.reload()};
+  say("Debrief ready.");
+}
+
+function hasSave(){try{const d=JSON.parse(localStorage.getItem("jordanSim")||"null");return d&&d.stage>0&&d.stage<6}catch(e){return false}}
+function resume(){try{const d=JSON.parse(localStorage.getItem("jordanSim"));Object.assign(S,d);S.causes=new Set(d.causes);if(S.stage===3&&!CONVO[S.node]&&S.node!=="end")S.node="open";go(S.stage)}catch(e){go(1)}}
+progress();syncKF();render();
+</script>
+</body>
+</html>
