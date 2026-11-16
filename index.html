@@ -114,6 +114,7 @@ ul.plain{list-style:none;padding:0}ul.plain li{margin:.5rem 0}
 @media (max-width:620px){.scene{height:200px}.scene .jordan{right:4%;width:140px}.av{width:70px!important;height:70px!important}}
 .convo1 .log{max-height:360px}
 .hero.sm .hero-t{max-width:30%}.hero.sm .hero-t strong{font-size:1.6rem}
+.demo{background:#fff6dd;border:1px solid #ecdca6;color:#5a4500;border-radius:8px;padding:.5rem .8rem;font-size:.88rem;margin-bottom:.6rem}
 /* stage chips */
 .stagechip{display:inline-flex;gap:.4rem;align-items:center;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:.2rem .6rem;border-radius:999px;margin-left:.4rem}
 .st-P{background:var(--pin)}.st-R{background:var(--rec)}.st-E{background:var(--exa)}.st-PL{background:var(--pla)}.st-RE{background:var(--rev)}
@@ -185,7 +186,7 @@ const IC={
  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".5"/>'
 };
 function icon(n,sz=20,cls=""){return `<svg class="ic ${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`}
-const HERO=`<div class="hero"><img src="img/brief-banner.webp" alt="A manager and an employee talking across a small table in a bright meeting room at Lumera."><div class="hero-t"><span>CASE FILE · NORTH REGION</span><strong>Jordan Lee</strong><em>Sales representative · 3 years with Lumera</em></div></div>`;
+const HERO=`<div class="hero"><img src="img/brief-banner.webp" alt="Jordan sitting across the table from you, the manager, seen from behind, in a bright meeting room at Lumera."><div class="hero-t"><span>CASE FILE · NORTH REGION</span><strong>Jordan Lee</strong><em>Sales representative · 3 years with Lumera</em></div></div>`;
 const ROOM=`<svg viewBox="0 0 150 70" aria-hidden="true" style="position:absolute;left:0;top:0;width:100%;height:auto;opacity:.9"><g fill="none" stroke="#c9bfd8" stroke-width="1.5" stroke-linecap="round"><rect x="10" y="8" width="40" height="30" rx="2"/><path d="M30 8v30M10 23h40"/><path d="M118 40c0-10 10-12 10-22 0 10 8 13 5 22z"/><path d="M119 40h14v18h-14z"/></g></svg>`;
 
 /* ============ DATA ============ */
@@ -316,6 +317,24 @@ const CONVO={
   ], next:"end"}
 };
 
+/* ============ DEMO MODE ============ */
+let DEMO=location.hash==="#demo";
+function demoFill(stage){
+  if(!DEMO)return;
+  if(stage===1&&!S.dp1.cls){S.dp1={cls:"sustained",stage:"late"};SORT.forEach(x=>S.sort[x.id]=x.a)}
+  if(stage===2&&!S.plan.gap){S.plan={gap:"Close rate has fallen from 33% to 25% to 17% over three quarters, against a 30% target.",
+    evidence:"1. Close rate 33% → 17% vs 30% target.\n2. Financing approval 80% → 40% (team 84% → 76%).\n3. Average discount 6% → 13% (team 8%).",
+    opening:"Your close rate has moved from 33% to 17% over three quarters, against a 30% target. I'd like to understand what you're seeing before we decide anything. What's changed from your side?",
+    questions:"Talk me through the proposals that were declined.\nWhat has changed since your results were stronger?\nIs anything about the new financing criteria unclear?",
+    causes:"Opportunity: new financing criteria. Ability: qualifying clinics. Motivation: no evidence yet (colleague comment is an assumption).",
+    support:"Briefing on the financing criteria, pipeline review, joint visits.",pol:["inf","hr","tgt"]}}
+  if(stage===4&&!S.actions.length){S.actions=[
+    {cause:[...S.causes][0]||"gen",what:"Pre-screen every new proposal against the financing criteria before sending it",measure:"10 of 10 proposals pre-screened; approval rate back above 70%",when:"Starting now; reviewed in 2 weeks",support:"Financing criteria briefing this week and a joint pipeline review"},
+    {cause:S.causes.has("c4")?"c4":"gen",what:"Update CRM within 48 hours and follow up every demo within 3 working days",measure:"100% of contacts logged within 48 hours",when:"Weekly from next Monday",support:"Weekly 20-minute check-in; help prioritise accounts"}]}
+  if(stage===5&&!S.fu.lag){S.fu={lead:["calls","prescreen","crm"],lag:"close",freq:"weekly",rev:"6",succ:"Pre-screening and CRM habits in place; close rate rising towards 30%.",esc:["e1","e2"],conf:4}}
+}
+function demoBadge(){return DEMO?`<div class="demo" role="note">Demo mode: example answers are filled in. Change anything, or just press Continue.</div>`:""}
+
 /* ============ STATE ============ */
 const S={stage:0,dp1:{},sort:{},plan:{},log:[],choices:[],causes:new Set(),missedCues:[],summary:"",sumCheck:[],actions:[],fu:{},node:"open",mood:"neutral"};
 const $=s=>document.querySelector(s);
@@ -368,8 +387,10 @@ function face(m){
 
 /* ============ SCREENS ============ */
 function render(){
+  demoFill(S.stage);
   const f=[brief,dp1,dp2,convo,dp6,dp7,debrief][S.stage];
   f();
+  if(DEMO&&S.stage>0&&S.stage<6)main.insertAdjacentHTML("afterbegin",demoBadge());
 }
 
 function brief(){
@@ -389,9 +410,10 @@ function brief(){
   <li class="il">${icon("flag")}<span>Success does <em>not</em> mean starting a formal PIP. It means evidence, a fair hearing, proportionate support and a clear review.</span></li></ul></div>
   <h2>How you'll be assessed</h2><p class="muted">Five pieces of evidence, each judged as Proficient, Developing or Not yet.</p>
   <div class="rubric"><div>${icon("target")}<b>S1 Preparation</b>Reading the evidence and planning the talk</div><div>${icon("chat")}<b>S2 Conversation</b>Objectivity, questioning, listening, judgement</div><div>${icon("ear")}<b>S3 Summary</b>An accurate summarise-back</div><div>${icon("plan")}<b>S4 Actions</b>SMART, linked to causes, with your support</div><div>${icon("cycle")}<b>S5 Follow-up</b>Monitoring, review and fair escalation</div></div>
-  <div class="row"><button class="btn" id="start">Start: review the evidence</button><button class="btn sec" id="peek">Open the files</button>${hasSave()?'<button class="btn sec" id="resume">Resume where I left off</button>':''}</div>`;
+  <div class="row"><button class="btn" id="start">Start: review the evidence</button><button class="btn sec" id="peek">Open the files</button>${hasSave()?'<button class="btn sec" id="resume">Resume where I left off</button>':''}<button class="btn sec" id="demoBtn">Run as demo (answers filled in)</button></div>`;
   $("#start").onclick=()=>{S.dp1={};S.sort={};S.plan={};S.log=[];S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";go(1)}; $("#peek").onclick=openFiles;
   if($("#resume"))$("#resume").onclick=resume;
+  $("#demoBtn").onclick=()=>{DEMO=true;try{history.replaceState(null,"","#demo")}catch(e){}$("#start").click()};
 }
 
 const SORT=[
@@ -467,6 +489,7 @@ function convo(){
   <div class="row"><button class="btn" id="say" disabled>Say this</button></div></div></div>`;
   const lg=$("#log");lg.scrollTop=lg.scrollHeight;
   let pick=null;main.querySelectorAll("input[name=c]").forEach(r=>r.onchange=()=>{pick=opts[+r.value];$("#say").disabled=false});
+  if(DEMO){const bi=opts.findIndex(o=>o.s===2);const el=main.querySelector(`input[name=c][value="${bi<0?0:bi}"]`);if(el){el.checked=true;pick=opts[+el.value];$("#say").disabled=false}}
   $("#say").onclick=()=>{
     S.log.push({w:"m",t:pick.t.replace(/^Paraphrase: /,"")});S.log.push({w:"j",t:pick.r});
     S.mood=pick.mood;
@@ -478,6 +501,7 @@ function convo(){
 }
 
 function summaryScreen(){
+  if(DEMO&&!S.summary){const b=["So the new financing partner has stricter criteria"];if(S.causes.has("c1"))b.push("and the smaller clinics you've always worked with are being declined because pre-screening hasn't changed");if(S.causes.has("c2"))b.push("and you've been using bigger discounts to rescue some deals");let t=b.join(", ")+".";if(S.causes.has("c4"))t+=" You're also behind on CRM and follow-up";if(S.causes.has("c5"))t+=" while you're caring for a family member at home";if(S.causes.has("c4"))t+=".";S.summary=t+" Have I got that right?"}
   main.innerHTML=`<span class="tag">DP4 · Summarise-back</span>${chip("R")}
   <h1>Summarise what Jordan has told you</h1>
   <div class="scene" role="img" aria-label="Meeting room with Jordan"><div class="jordan">${face(S.mood)}</div></div>
