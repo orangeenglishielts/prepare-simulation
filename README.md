@@ -1,4 +1,4 @@
-# The Jordan Conversation
+# The Nadia Conversation
 
 PREPARE simulation prototype for the MDOE407 group project (Managing Underperformance: Effective Performance Conversations for New Managers), by Lindsey, Jezal and Louis.
 

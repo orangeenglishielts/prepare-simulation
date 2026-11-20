@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Jordan Conversation | PREPARE Simulation Prototype</title>
+<title>The Nadia Conversation | PREPARE Simulation Prototype</title>
 <link rel="icon" href="img/lumera-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -191,7 +191,7 @@ details.card[open]>summary{margin-bottom:.6rem}
 <dialog id="kf" class="sheet" aria-labelledby="kfh">
  <div class="paper">
   <div class="ph"><img src="img/lumera-logo-h.webp" alt="Lumera" class="plogo"><div class="pmeta">INTERNAL · PERFORMANCE REPORT<br>Printed for: Regional Manager, North</div></div>
-  <h2 id="kfh">Quarterly scorecard: Jordan Lee</h2>
+  <h2 id="kfh">Quarterly scorecard: Nadia Cole</h2>
   <table class="ptable"><thead><tr><th>Measure</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Team Q3</th><th>Target</th></tr></thead><tbody>
    <tr><td>Quota attainment</td><td>102%</td><td>81%</td><td>64%</td><td>91%</td><td>100%</td></tr>
    <tr><td>Demonstrations</td><td>18</td><td>17</td><td>16</td><td>17</td><td>–</td></tr>
@@ -240,15 +240,15 @@ const IC={
  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".5"/>'
 };
 function icon(n,sz=20,cls=""){return `<svg class="ic ${cls}" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`}
-const HERO=`<div class="hero"><img src="img/brief-banner.webp" alt="Jordan sitting across the table from you, the manager, seen from behind, in a bright meeting room at Lumera."><div class="hero-t"><span>CASE FILE · NORTH REGION</span><strong>Jordan Lee</strong><em>Sales representative · 3 years with Lumera</em></div></div>`;
+const HERO=`<div class="hero"><img src="img/brief-banner.webp" alt="Nadia sitting across the table from you, the manager, seen from behind, in a bright meeting room at Lumera."><div class="hero-t"><span>CASE FILE · NORTH REGION</span><strong>Nadia Cole</strong><em>Sales representative · 3 years with Lumera</em></div></div>`;
 const ROOM=`<svg viewBox="0 0 150 70" aria-hidden="true" style="position:absolute;left:0;top:0;width:100%;height:auto;opacity:.9"><g fill="none" stroke="#c9bfd8" stroke-width="1.5" stroke-linecap="round"><rect x="10" y="8" width="40" height="30" rx="2"/><path d="M30 8v30M10 23h40"/><path d="M118 40c0-10 10-12 10-22 0 10 8 13 5 22z"/><path d="M119 40h14v18h-14z"/></g></svg>`;
 
 /* ============ DATA ============ */
 const STAGES=["Brief","Evidence","Plan the talk","Conversation","Recovery plan","Follow-up","Debrief"];
 
 const FILES={
- scorecard:{t:"Scorecard",h:`<h3>Quarterly scorecard: Jordan Lee (North region)</h3>
- <table><caption class="sr">Jordan's results Q1 to Q3 with team Q3 average and target</caption>
+ scorecard:{t:"Scorecard",h:`<h3>Quarterly scorecard: Nadia Cole (North region)</h3>
+ <table><caption class="sr">Nadia's results Q1 to Q3 with team Q3 average and target</caption>
  <thead><tr><th>Measure</th><th class="num">Q1</th><th class="num">Q2</th><th class="num">Q3</th><th class="num">Team Q3</th><th class="num">Target</th></tr></thead><tbody>
  <tr><td>Quota attainment</td><td class="num">102%</td><td class="num">81%</td><td class="num">64%</td><td class="num">91%</td><td class="num">100%</td></tr>
  <tr><td>Demonstrations</td><td class="num">18</td><td class="num">17</td><td class="num">16</td><td class="num">17</td><td class="num">–</td></tr>
@@ -269,7 +269,7 @@ const FILES={
  <tr><td>Financing approval rate</td><td class="num">84%</td><td class="num">80%</td><td class="num">76%</td></tr>
  <tr><td>Average discount</td><td class="num">8%</td><td class="num">8%</td><td class="num">8%</td></tr>
  </tbody></table>`},
- crm:{t:"CRM notes",h:`<h3>CRM: recent lost or stalled deals (Jordan)</h3>
+ crm:{t:"CRM notes",h:`<h3>CRM: recent lost or stalled deals (Nadia)</h3>
  <table><thead><tr><th>Clinic</th><th>Stage lost</th><th>Note</th></tr></thead><tbody>
  <tr><td>Bloom Skin Studio (sole practitioner, opened 2025)</td><td>Financing</td><td>Declined by finance partner. No further note.</td></tr>
  <tr><td>Northgate Aesthetics (2 practitioners)</td><td>Financing</td><td>Declined. "Will try again next quarter."</td></tr>
@@ -278,9 +278,9 @@ const FILES={
  <tr><td>Harbour Medispa</td><td>Proposal</td><td>Client says no follow-up received after demo (2 weeks).</td></tr>
  </tbody></table>`},
  review:{t:"Last year's review",h:`<h3>Annual review extract (last year)</h3><p><strong>Overall:</strong> Exceeds expectations.</p>
- <p>"Jordan is knowledgeable, professional and builds strong relationships with clinics. Consistently above target and well organised in CRM. A reliable member of the team."</p>`},
+ <p>"Nadia is knowledgeable, professional and builds strong relationships with clinics. Consistently above target and well organised in CRM. A reliable member of the team."</p>`},
  email:{t:"Colleague email",h:`<div class="email"><p><strong>From:</strong> Alex (North region)<br><strong>To:</strong> You<br><strong>Subject:</strong> Quick heads-up</p>
- <p>Hi, just thought you should know Jordan seems disengaged lately. Not really joining in on team calls. Might be worth a chat. Alex</p></div>`},
+ <p>Hi, just thought you should know Nadia seems disengaged lately. Not really joining in on team calls. Might be worth a chat. Alex</p></div>`},
  policy:{t:"Policy extract",h:`<h3>Performance management policy (extract)</h3><ol>
  <li>Managers should normally address performance concerns informally first, in a private performance conversation.</li>
  <li>The employee should be shown the relevant evidence and given a genuine opportunity to respond.</li>
@@ -294,36 +294,36 @@ const FILES={
 
 const CAUSES={
  c1:{n:"Not adapted pre-screening to the new financing criteria",hint:"Asking about the declined proposals and which clinics they were."},
- c2:{n:"Using larger discounts to rescue deals",hint:"Paraphrasing Jordan's account accurately, so Jordan felt understood and said more."},
+ c2:{n:"Using larger discounts to rescue deals",hint:"Paraphrasing Nadia's account accurately, so Nadia felt understood and said more."},
  c3:{n:"Low confidence discussing alternative financing options",hint:"Asking whether the new criteria and options were clear (role clarity)."},
- c4:{n:"Behind on CRM updates and follow-up",hint:"Following up when Jordan mentioned being behind."},
+ c4:{n:"Behind on CRM updates and follow-up",hint:"Following up when Nadia mentioned being behind."},
  c5:{n:"Caring responsibilities at home affecting organisation",hint:"Picking up the cue 'it's been a lot lately' with an open, non-intrusive question."}
 };
 
 /* conversation graph */
 const CONVO={
  open:{ j:null,mood:"neutral",dp:"DP3",crit:"Objectivity",
-  q:"Jordan sits down. How do you open the conversation?",
+  q:"Nadia sits down. How do you open the conversation?",
   opts:[
    {t:"\"Your numbers have been poor for a while now. What's going on?\"",s:0,mood:"defensive",
-    r:"It's not just me. It's the new financing partner. Everyone's struggling.",fb:"Vague and implies blame. Jordan hears a judgement, not evidence, and becomes defensive.",
-    better:"Open with specific evidence and the expected standard, then invite Jordan's view."},
+    r:"It's not just me. It's the new financing partner. Everyone's struggling.",fb:"Vague and implies blame. Nadia hears a judgement, not evidence, and becomes defensive.",
+    better:"Open with specific evidence and the expected standard, then invite Nadia's view."},
    {t:"\"Your close rate has moved from 33% to 17% over three quarters, against a 30% target. I'd like to understand what you're seeing before we decide anything. What's changed from your side?\"",s:2,mood:"open",
     r:"Yeah... I know it's dropped. A lot of it is the new financing partner, honestly. Half my proposals are getting knocked back.",fb:"Strong: evidence, standard, gap, then an open question (Evidence → Standard → Gap → Inquiry)."},
    {t:"\"I know the financing change has been hard on everyone, so please don't worry too much about the numbers.\"",s:0,mood:"neutral",
-    r:"Oh. Okay, thanks. Yes, it's been tough with the financing.",fb:"Kind, but it drops the expectation before you know the facts. Jordan now thinks the gap isn't important.",
+    r:"Oh. Okay, thanks. Yes, it's been tough with the financing.",fb:"Kind, but it drops the expectation before you know the facts. Nadia now thinks the gap isn't important.",
     better:"Acknowledge the context but still state the gap clearly against the standard."}
   ], next:"probe1"},
- probe1:{ j:"(Jordan's view of the financing problem)",dp:"DP4",crit:"Questioning",
-  q:"Jordan blames the financing partner. What do you do next?",
+ probe1:{ j:"(Nadia's view of the financing problem)",dp:"DP4",crit:"Questioning",
+  q:"Nadia blames the financing partner. What do you do next?",
   opts:[
    {t:"\"Everyone has the same partner, and the rest of the team is managing.\"",s:0,mood:"defensive",
-    r:"Right. So it's my fault then.",fb:"Closes the conversation down. You may be right that context doesn't explain everything, but you haven't heard Jordan's account yet.",
+    r:"Right. So it's my fault then.",fb:"Closes the conversation down. You may be right that context doesn't explain everything, but you haven't heard Nadia's account yet.",
     better:"\"Talk me through the proposals that were declined. What kind of clinics were they?\""},
    {t:"\"Talk me through the proposals that were declined. What kind of clinics were they?\"",s:2,mood:"open",unlock:"c1",
     r:"Mostly the smaller independents, the sole practitioners and newer clinics. I've been sending them through the same way I always did. To be honest, I haven't really got my head round the new criteria.",fb:"Strong open question focused on the process. It surfaces a cause you can act on."},
    {t:"\"OK, so it's mainly the financing. Let's move on to actions.\"",s:0,mood:"neutral",
-    r:"Sure.",fb:"Accepts the first explanation without testing it. The team's approval rate fell 8 points; Jordan's fell 40. Something else is going on.",
+    r:"Sure.",fb:"Accepts the first explanation without testing it. The team's approval rate fell 8 points; Nadia's fell 40. Something else is going on.",
     better:"Probe the explanation with an open question before planning."}
   ], next:"probe2"},
  probe2:{ dp:"DP4",crit:"Active listening",
@@ -331,31 +331,31 @@ const CONVO={
   dyn:true,
   opts:[
    {t:"Paraphrase: \"So the clinics you've always worked with are now less likely to qualify, and your process hasn't changed to reflect that. Have I got that right?\"",s:2,mood:"open",unlock:"c2",needs:"c1",
-    r:"Yes, exactly. And when they get declined I've been... trying to rescue them with a bigger discount, so at least something closes. I know that's not ideal.",fb:"Accurate paraphrase. Jordan feels understood and volunteers more (the discounting)."},
+    r:"Yes, exactly. And when they get declined I've been... trying to rescue them with a bigger discount, so at least something closes. I know that's not ideal.",fb:"Accurate paraphrase. Nadia feels understood and volunteers more (the discounting)."},
    {t:"\"Were the new criteria and the alternative financing options explained clearly to you?\"",s:1,mood:"open",unlock:"c3",
     r:"There was a webinar, but it was quick. I'm not confident talking clinics through the alternatives, so I tend to avoid it.",fb:"A useful role-clarity question. It reveals a training need, though a paraphrase first would have shown you were listening.",
     better:"Summarise what you've heard first, then ask."},
-   {t:"\"You should have read the criteria by now, Jordan.\"",s:0,mood:"defensive",
-    r:"I've had a lot on.",fb:"Judgemental and it shuts down information. Jordan stops explaining.",
-    better:"Reflect back what Jordan said and check your understanding."}
+   {t:"\"You should have read the criteria by now, Nadia.\"",s:0,mood:"defensive",
+    r:"I've had a lot on.",fb:"Judgemental and it shuts down information. Nadia stops explaining.",
+    better:"Reflect back what Nadia said and check your understanding."}
   ], next:"cue"},
  cue:{ dp:"DP4",crit:"Active listening",
   jline:"It's been a lot lately, to be honest. I'm behind on my CRM notes as well.",
-  q:"Jordan says: \"It's been a lot lately, to be honest. I'm behind on my CRM notes as well.\" How do you respond?",
+  q:"Nadia says: \"It's been a lot lately, to be honest. I'm behind on my CRM notes as well.\" How do you respond?",
   opts:[
    {t:"\"You said it's been a lot lately. Would you like to say a bit more about that? Only share what you're comfortable with.\"",s:2,mood:"concerned",unlock:["c4","c5"],
-    r:"Someone in my family has been seriously ill, and I've been doing most of the caring in the evenings. Some days I'm just... behind. Follow-ups have slipped, and the CRM. I didn't want it to look like an excuse.",fb:"You picked up the cue respectfully, without probing. Jordan shares important context."},
+    r:"Someone in my family has been seriously ill, and I've been doing most of the caring in the evenings. Some days I'm just... behind. Follow-ups have slipped, and the CRM. I didn't want it to look like an excuse.",fb:"You picked up the cue respectfully, without probing. Nadia shares important context."},
    {t:"\"Let's look at the CRM then. Which notes are behind?\"",s:1,mood:"neutral",unlock:"c4",
     r:"A few. And some follow-ups after demos have slipped, which I know isn't good.",fb:"Task-focused and reasonable, but you missed the cue \"it's been a lot lately\". There is context you haven't heard.",
     better:"\"You said it's been a lot lately. Would you like to say a bit more?\""},
-   {t:"\"The CRM is part of the job, Jordan. It needs to be up to date.\"",s:0,mood:"defensive",
-    r:"Understood.",fb:"True, but it closes the conversation at the point Jordan was about to explain. Cue missed.",
+   {t:"\"The CRM is part of the job, Nadia. It needs to be up to date.\"",s:0,mood:"defensive",
+    r:"Understood.",fb:"True, but it closes the conversation at the point Nadia was about to explain. Cue missed.",
     better:"Follow the cue with an open, non-intrusive question."}
   ], next:"summary"},
  summary:{type:"summary",dp:"DP4",next:"weigh"},
  weigh:{ dp:"DP5",crit:"Professional judgement",
   jline:"So really it's the financing change, isn't it? Can we agree that's the main thing?",
-  q:"Jordan asks: \"So really it's the financing change, isn't it? Can we agree that's the main thing?\"",
+  q:"Nadia asks: \"So really it's the financing change, isn't it? Can we agree that's the main thing?\"",
   opts:[
    {t:"\"The financing change is part of it, and I'll take that into account. The team's approval rate fell 8 points and yours fell 40, so let's also look at what's within your control.\"",s:2,mood:"open",
     r:"That's fair. I can see that.",fb:"Weighs the explanation against the evidence: partly supported. You hold the expectation without dismissing the context."},
@@ -364,10 +364,10 @@ const CONVO={
     better:"Acknowledge the context, compare with the team data, and keep the expectation."},
    {t:"\"No. The financing is an excuse.\"",s:0,mood:"defensive",
     r:"It's not an excuse. It's real.",fb:"Dismisses a genuine factor that affects the whole team. Explanations should be weighed, not rejected.",
-    better:"Partly accept: it's real, but it doesn't explain the size of Jordan's drop."}
+    better:"Partly accept: it's real, but it doesn't explain the size of Nadia's drop."}
   ], next:"disclose"},
  disclose:{ dp:"DP5",crit:"Response to disclosure",needs:"c5",
-  q:"Jordan has told you about caring for a family member. How do you respond?",
+  q:"Nadia has told you about caring for a family member. How do you respond?",
   opts:[
    {t:"\"Thank you for telling me, and I'm sorry it's been so hard. You don't need to share more than you want to. I'll check with HR what support is available. The expectations stay, but let's make the plan realistic and I'll help.\"",s:2,mood:"open",
     r:"Thanks. That actually helps. I'd rather sort this out than let it drift.",fb:"Respectful, follows policy (HR consulted), offers support and keeps accountability."},
@@ -390,7 +390,7 @@ function srcFor(t){const s=VOICE[t];return s?s.replace(/\.mp3$/,"."+EXT):null}
 player.preload="auto";
 player.addEventListener('ended',()=>{setBtn(null);if(queue.length)playLine(queue.shift(),true)});
 player.addEventListener('pause',()=>setBtn(null));
-function setBtn(b){if(curBtn){curBtn.textContent="▶ Play";curBtn.setAttribute("aria-label","Play Jordan's line")}curBtn=b;if(b){b.textContent="■ Playing";b.setAttribute("aria-label","Stop Jordan's line")}}
+function setBtn(b){if(curBtn){curBtn.textContent="▶ Play";curBtn.setAttribute("aria-label","Play Nadia's line")}curBtn=b;if(b){b.textContent="■ Playing";b.setAttribute("aria-label","Stop Nadia's line")}}
 function playQueue(q){queue=q.slice(1);if(q.length)playLine(q[0],true)}
 function playLine(t,keep,btn){if(!keep)queue=[];const src=srcFor(t);if(!src)return;
   if(btn&&curBtn===btn&&!player.paused){player.pause();return}
@@ -399,7 +399,7 @@ function playLine(t,keep,btn){if(!keep)queue=[];const src=srcFor(t);if(!src)retu
 
 /* ============ PREPARE ============ */
 const PREP=[["P","Pinpoint","target","What exactly is the gap? Standard, evidence, trend.","Verified gap statement","do"],
- ["R","Receive","ear","What is Jordan's perspective? Evidence first, then ask and listen.","Employee perspective record","do"],
+ ["R","Receive","ear","What is Nadia's perspective? Evidence first, then ask and listen.","Employee perspective record","do"],
  ["E","Examine","search","What is causing it? Ability, motivation, opportunity: test each against evidence.","Performance cause map","do"],
  ["P","Plan","plan","What will change? Actions matched to causes, SMART, with your support.","Recovery plan","do"],
  ["A","Act","bulb","How will you coach and support? Observe, practise, give feedback, remove barriers.","Coaching and support record","plan"],
@@ -426,7 +426,7 @@ function demoFill(stage){
 function demoBadge(){return DEMO?`<div class="demo" role="note">Demo mode: example answers are filled in. Change anything, or just press Continue. <label class="jl">Jump to <select id="jumpSel">${STAGES.map((t,i)=>`<option value="${i}" ${i===S.stage?"selected":""}>${i+1}. ${t}</option>`).join("")}</select></label></div>`:""}
 function demoAutoConvo(){
   if(S.choices.length)return;
-  S.log=[{w:"note",t:"The meeting room. Jordan arrives on time and sits down."}];S.mood="neutral";
+  S.log=[{w:"note",t:"The meeting room. Nadia arrives on time and sits down."}];S.mood="neutral";
   let id="open";
   while(id&&id!=="end"){const n=CONVO[id];
     if(n.type==="summary"){if(!S.summary)S.summary="";demoFill(3);if(!S.summary)S.summary=modelSummary();S.log.push({w:"m",t:S.summary});S.log.push({w:"j",t:"Yes, that's it. Thanks for actually listening."});id=n.next;continue}
@@ -439,7 +439,7 @@ function demoAutoConvo(){
 }
 function demoJump(n){
   for(const st of [1,2])if(n>st)demoFill(st);
-  if(n>3)demoAutoConvo(); else if(n===3){S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.guardedLoss=0;S.node="open";S.log=[{w:"note",t:"The meeting room. Jordan arrives on time and sits down."}];S.mood="neutral";S.lastPlayed=0}
+  if(n>3)demoAutoConvo(); else if(n===3){S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.guardedLoss=0;S.node="open";S.log=[{w:"note",t:"The meeting room. Nadia arrives on time and sits down."}];S.mood="neutral";S.lastPlayed=0}
   if(n>4)demoFill(4);if(n>5)demoFill(5);
   go(n);
 }
@@ -497,7 +497,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#drawer").classL
 /* ============ FACE ============ */
 const PORTRAIT={neutral:"img/jordan-neutral.webp",open:"img/jordan-open.webp",defensive:"img/jordan-defensive.webp",concerned:"img/jordan-concerned.webp"}; // add open/defensive/concerned when ready
 function face(m){
-  const c={neutral:["#8a8299","Jordan is listening, with a neutral expression"],open:["#2e7d4f","Jordan looks relaxed and open to talking"],defensive:["#b3261e","Jordan looks defensive and is avoiding eye contact"],concerned:["#8a5f00","Jordan looks worried and upset"]}[m];
+  const c={neutral:["#8a8299","Nadia is listening, with a neutral expression"],open:["#2e7d4f","Nadia looks relaxed and open to talking"],defensive:["#b3261e","Nadia looks defensive and is avoiding eye contact"],concerned:["#8a5f00","Nadia looks worried and upset"]}[m];
   const src=PORTRAIT[m]||PORTRAIT.neutral;
   return `<div class="av" style="--ring:${c[0]}" role="img" aria-label="${c[1]}">${src?`<img src="${src}" alt="">`:`<span>JL</span>`}</div>
   <div class="mood"><span class="dot" style="background:${c[0]}"></span><span>${c[1]}</span></div>`;
@@ -514,22 +514,22 @@ function render(){
 
 function brief(){
   main.innerHTML=`<span class="tag">Your brief</span>
-  <h1>The Jordan Conversation</h1>
+  <h1>The Nadia Conversation</h1>
   ${HERO}
   <div class="card"><p><strong>Your role.</strong> You are the new regional sales manager at Lumera Aesthetics. You joined from another region three months ago and manage eight sales representatives.</p>
-  <p><strong>The situation.</strong> Jordan Lee has been with Lumera for three years and has a strong track record. Over the last three quarters, Jordan's results have declined. You have booked a private 45-minute one-to-one. This is a performance conversation, not a disciplinary meeting.</p>
+  <p><strong>The situation.</strong> Nadia Cole has been with Lumera for three years and has a strong track record. Over the last three quarters, Nadia's results have declined. You have booked a private 45-minute one-to-one. This is a performance conversation, not a disciplinary meeting.</p>
   <p><strong>What you don't know yet:</strong> why the decline has happened.</p></div>
   <h2>Your framework: PREPARE</h2>
   <p class="muted">Use PREPARE to guide the conversation. Open the PREPARE job aid in Files at any time.</p>
   ${prepStrip()}
   <h2>Your task</h2>
-  <ol><li>Establish what the evidence shows.</li><li>Understand Jordan's perspective.</li><li>Agree fair, practical next steps, including your own support.</li><li>Decide how progress will be reviewed, and when HR would be involved.</li></ol>
+  <ol><li>Establish what the evidence shows.</li><li>Understand Nadia's perspective.</li><li>Agree fair, practical next steps, including your own support.</li><li>Decide how progress will be reviewed, and when HR would be involved.</li></ol>
   <div class="card"><h3 style="margin-top:0">Before you start</h3><ul>
   <li class="il">${icon("folder")}<span>Open <strong>Files</strong> (top right) at any time. Opening a file never loses your answers.</span></li>
   <li class="il">${icon("chat")}<span>There are no hints during the conversation. You'll get full feedback in the debrief.</span></li>
   <li class="il">${icon("clock")}<span>About 30 minutes, no time limit. You can stop and resume later.</span></li>
   <li class="il">${icon("kbd")}<span>Everything works with a keyboard. Use A− / A+ to change the text size.</span></li>
-  <li class="il">${icon("chat")}<span>Jordan's lines play as audio and are always shown as text. Use "Sound on/off" in the header, or ▶ Play to hear a line again.</span></li>
+  <li class="il">${icon("chat")}<span>Nadia's lines play as audio and are always shown as text. Use "Sound on/off" in the header, or ▶ Play to hear a line again.</span></li>
   <li class="il">${icon("flag")}<span>Success does <em>not</em> mean starting a formal PIP. It means evidence, a fair hearing, proportionate support and a clear review.</span></li></ul></div>
   <h2>How you'll be assessed</h2><p class="muted">Five pieces of evidence, each judged as Proficient, Developing or Not yet.</p>
   <div class="rubric"><div>${icon("target")}<b>S1 Preparation</b>Reading the evidence and planning the talk</div><div>${icon("chat")}<b>S2 Conversation</b>Objectivity, questioning, listening, judgement</div><div>${icon("ear")}<b>S3 Summary</b>An accurate summarise-back</div><div>${icon("plan")}<b>S4 Actions</b>SMART, linked to causes, with your support</div><div>${icon("cycle")}<b>S5 Follow-up</b>Monitoring, review and fair escalation</div></div>
@@ -540,19 +540,19 @@ function brief(){
 }
 
 const SORT=[
- {id:"s1",t:"Jordan's close rate fell from 33% to 17% across three quarters.",a:"evidence"},
- {id:"s2",t:"Jordan seems disengaged lately.",a:"assumption"},
- {id:"s3",t:"Jordan's financing approval fell from 80% to 40%; the team's fell from 84% to 76%.",a:"evidence"},
- {id:"s4",t:"Jordan has lost motivation since the financing change.",a:"assumption"},
+ {id:"s1",t:"Nadia's close rate fell from 33% to 17% across three quarters.",a:"evidence"},
+ {id:"s2",t:"Nadia seems disengaged lately.",a:"assumption"},
+ {id:"s3",t:"Nadia's financing approval fell from 80% to 40%; the team's fell from 84% to 76%.",a:"evidence"},
+ {id:"s4",t:"Nadia has lost motivation since the financing change.",a:"assumption"},
  {id:"s5",t:"Why three recent declined proposals were all small clinics.",a:"investigate"},
  {id:"s6",t:"Why two clinics report slow follow-up after demos.",a:"investigate"},
  {id:"s7",t:"Demos and proposals have stayed broadly steady (18 → 16; 12 → 11).",a:"evidence"}
 ];
 function dp1(){
   main.innerHTML=`<span class="tag">Decision point 1</span>${chip("P")}
-  <h1>What does the evidence show?</h1><p>Use the Files to review Jordan's scorecard, the team dashboard, CRM notes, last year's review and the colleague email.</p>
+  <h1>What does the evidence show?</h1><p>Use the Files to review Nadia's scorecard, the team dashboard, CRM notes, last year's review and the colleague email.</p>
   <div class="row" style="margin-top:0"><button class="btn sec" id="peek">Open the files</button></div>
-  <fieldset><legend>1. How would you classify Jordan's performance?</legend>
+  <fieldset><legend>1. How would you classify Nadia's performance?</legend>
    ${[["sustained","Sustained underperformance"],["isolated","An isolated dip"],["insufficient","Not enough evidence to say"]].map(([v,l])=>`<label class="opt"><input type="radio" name="cls" value="${v}" ${S.dp1.cls===v?"checked":""}>${l}</label>`).join("")}
   </fieldset>
   <fieldset><legend>2. Where in the sales process is the main gap?</legend>
@@ -590,25 +590,25 @@ function dp2(){
   const check=()=>{const ok=["gap","evidence","opening","questions"].every(k=>(p[k]||"").trim().length>5);$("#next").disabled=!ok;$("#need").textContent=ok?"":"Complete at least boxes 1 to 4."};
   main.querySelectorAll("[data-k]").forEach(el=>el.oninput=()=>{p[el.dataset.k]=el.value;check()});
   main.querySelectorAll("[data-pol]").forEach(el=>el.onchange=()=>{p.pol=[...main.querySelectorAll("[data-pol]:checked")].map(x=>x.dataset.pol)});
-  check(); $("#next").onclick=()=>{S.node="open";S.log=[{w:"note",t:"The meeting room. Jordan arrives on time and sits down."}];go(3)};
+  check(); $("#next").onclick=()=>{S.node="open";S.log=[{w:"note",t:"The meeting room. Nadia arrives on time and sits down."}];go(3)};
 }
 
 /* conversation */
 function convo(){
   const n=CONVO[S.node];
-  if(S.node==="end"){S.log.push({w:"note",t:"The conversation ends. You agree to send Jordan a written plan."});return go(4)}
+  if(S.node==="end"){S.log.push({w:"note",t:"The conversation ends. You agree to send Nadia a written plan."});return go(4)}
   if(n.needs&&!S.causes.has(n.needs)){ // skip disclosure node if not revealed
     S.missedCues.push("disclosure");S.node=n.next;return convo();
   }
   if(n.type==="summary") return summaryScreen();
   let opts=n.opts.filter(o=>!o.needs||S.causes.has(o.needs));
   if(S.mood==="defensive"&&n.opts&&n.dp!=="DP3"){opts=[{t:"\"I'm sorry, that came out wrong. I'm not here to blame you. I want to understand what's been happening.\"",s:1,mood:"neutral",repair:true,
-    r:"...Okay. Thanks. It has been a difficult few months.",fb:"A repair move. Jordan had become defensive, and acknowledging it reopens the conversation. Better still to avoid the defensive moment in the first place."},...opts]}
+    r:"...Okay. Thanks. It has been a difficult few months.",fb:"A repair move. Nadia had become defensive, and acknowledging it reopens the conversation. Better still to avoid the defensive moment in the first place."},...opts]}
   if(n.jline&&!S.log.some(l=>l.t===n.jline)) S.log.push({w:"j",t:n.jline});
   main.innerHTML=`<span class="tag">${n.dp} · Conversation</span>${chip(n.dp==="DP3"?"R":n.dp==="DP4"?"R":"E")}
-  <h1>Your one-to-one with Jordan</h1>
-  <div class="scene" role="img" aria-label="Meeting room. ${S.mood==="neutral"?"Jordan sits opposite you.":"Jordan looks "+S.mood+"."}"><div class="jordan">${face(S.mood)}</div></div>
-  <div class="convo1"><div><div class="log" id="log" aria-label="Conversation so far">${S.log.map(l=>l.w==="note"?`<div class="msg note">${esc(l.t)}</div>`:`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Jordan":"You"}${l.w==="j"&&VOICE[l.t]?` <button class="play" data-t="${esc(l.t)}" aria-label="Play Jordan's line">▶ Play</button>`:""}</span>${esc(l.t)}</div>`).join("")}</div>
+  <h1>Your one-to-one with Nadia</h1>
+  <div class="scene" role="img" aria-label="Meeting room. ${S.mood==="neutral"?"Nadia sits opposite you.":"Nadia looks "+S.mood+"."}"><div class="jordan">${face(S.mood)}</div></div>
+  <div class="convo1"><div><div class="log" id="log" aria-label="Conversation so far">${S.log.map(l=>l.w==="note"?`<div class="msg note">${esc(l.t)}</div>`:`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Nadia":"You"}${l.w==="j"&&VOICE[l.t]?` <button class="play" data-t="${esc(l.t)}" aria-label="Play Nadia's line">▶ Play</button>`:""}</span>${esc(l.t)}</div>`).join("")}</div>
   <fieldset><legend>${esc(n.q)}</legend>
   ${opts.map((o,i)=>`<label class="opt"><input type="radio" name="c" value="${i}">${esc(o.t)}</label>`).join("")}</fieldset>
   <div class="row"><button class="btn" id="say" disabled>Say this</button></div></div></div>`;
@@ -623,9 +623,9 @@ function convo(){
     if(guarded){S.log[S.log.length-1].t="(guarded) I don't know. It's just been hard.";S.guardedLoss=(S.guardedLoss||0)+1}
     else [].concat(pick.unlock||[]).forEach(c=>S.causes.add(c));
     S.mood=pick.repair?"neutral":(guarded?"defensive":pick.mood);
-    if(pick.repair){S.repairs=(S.repairs||0)+1;S.choices.push({dp:n.dp,crit:"Repair",q:n.q,o:pick,all:opts});say("Jordan replies: "+pick.r);save();return convo()}
-    S.choices.push({dp:n.dp,crit:n.crit,q:n.q,o:guarded?{...pick,s:Math.min(pick.s,1),fb:pick.fb+" But Jordan was defensive, so the good question got a guarded answer and the information stayed hidden."}:pick,all:opts});
-    say("Jordan replies: "+pick.r);
+    if(pick.repair){S.repairs=(S.repairs||0)+1;S.choices.push({dp:n.dp,crit:"Repair",q:n.q,o:pick,all:opts});say("Nadia replies: "+pick.r);save();return convo()}
+    S.choices.push({dp:n.dp,crit:n.crit,q:n.q,o:guarded?{...pick,s:Math.min(pick.s,1),fb:pick.fb+" But Nadia was defensive, so the good question got a guarded answer and the information stayed hidden."}:pick,all:opts});
+    say("Nadia replies: "+pick.r);
     S.node=n.next;save();convo();
   };
 }
@@ -633,15 +633,15 @@ function convo(){
 function summaryScreen(){
   if(DEMO&&!S.summary){const b=["So the new financing partner has stricter criteria"];if(S.causes.has("c1"))b.push("and the smaller clinics you've always worked with are being declined because pre-screening hasn't changed");if(S.causes.has("c2"))b.push("and you've been using bigger discounts to rescue some deals");let t=b.join(", ")+".";if(S.causes.has("c4"))t+=" You're also behind on CRM and follow-up";if(S.causes.has("c5"))t+=" while you're caring for a family member at home";if(S.causes.has("c4"))t+=".";S.summary=t+" Have I got that right?"}
   main.innerHTML=`<span class="tag">DP4 · Summarise-back</span>${chip("R")}
-  <h1>Summarise what Jordan has told you</h1>
-  <div class="scene" role="img" aria-label="Meeting room with Jordan"><div class="jordan">${face(S.mood)}</div></div>
+  <h1>Summarise what Nadia has told you</h1>
+  <div class="scene" role="img" aria-label="Meeting room with Nadia"><div class="jordan">${face(S.mood)}</div></div>
   <div class="convo1"><div>
-  <div class="card"><p>Before moving on, you say you want to check you've understood. In 2–4 sentences, write the summary you would say back to Jordan. Include only what Jordan has actually told you.</p>
-  <div class="field"><label for="sum">Your summary to Jordan</label><textarea id="sum">${esc(S.summary)}</textarea></div>
+  <div class="card"><p>Before moving on, you say you want to check you've understood. In 2–4 sentences, write the summary you would say back to Nadia. Include only what Nadia has actually told you.</p>
+  <div class="field"><label for="sum">Your summary to Nadia</label><textarea id="sum">${esc(S.summary)}</textarea></div>
   <button class="btn sec" id="peekLog">Show the conversation so far</button><div id="logbox"></div></div>
   <div class="row"><button class="btn" id="next" disabled>Say this summary</button></div></div></div>`;
   $("#sum").oninput=e=>{S.summary=e.target.value;$("#next").disabled=S.summary.trim().length<20};
-  $("#peekLog").onclick=()=>{$("#logbox").innerHTML=`<div class="log">${S.log.filter(l=>l.w!=="note").map(l=>`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Jordan":"You"}</span>${esc(l.t)}</div>`).join("")}</div>`};
+  $("#peekLog").onclick=()=>{$("#logbox").innerHTML=`<div class="log">${S.log.filter(l=>l.w!=="note").map(l=>`<div class="msg ${l.w}"><span class="who">${l.w==="j"?"Nadia":"You"}</span>${esc(l.t)}</div>`).join("")}</div>`};
   $("#next").disabled=S.summary.trim().length<20;
   $("#next").onclick=()=>{
     S.log.push({w:"m",t:S.summary});
@@ -656,14 +656,14 @@ function dp6(){
   const opts=[...S.causes].map(c=>`<option value="${c}">${CAUSES[c].n}</option>`).join("")+`<option value="gen">General performance (close rate)</option>`;
   if(!S.actions.length)S.actions=[{},{}];
   main.innerHTML=`<span class="tag">Decision point 6</span>${chip("PA")}
-  <h1>Write Jordan's recovery actions</h1>
-  <p>Based on what you found out, write two or three SMART actions. Each one should link to a cause and say what <strong>you</strong> will do to support Jordan.</p>
+  <h1>Write Nadia's recovery actions</h1>
+  <p>Based on what you found out, write two or three SMART actions. Each one should link to a cause and say what <strong>you</strong> will do to support Nadia.</p>
   <div class="card"><h3 style="margin-top:0">What you found out</h3>${S.causes.size?`<ul>${[...S.causes].map(c=>`<li>${CAUSES[c].n}</li>`).join("")}</ul>`:`<p class="muted">You didn't uncover specific causes. Plan from the scorecard evidence.</p>`}</div>
   <div id="acts"></div>
   <div class="row"><button class="btn sec" id="add">Add another action</button><button class="btn" id="next" disabled>Continue to follow-up</button><span class="hint" id="need"></span></div>`;
   const draw=()=>{$("#acts").innerHTML=S.actions.map((a,i)=>`<fieldset><legend>Action ${i+1}</legend>
    <div class="field"><label for="ac${i}">Links to cause</label><select id="ac${i}" data-i="${i}" data-f="cause"><option value="">Choose…</option>${opts}</select></div>
-   <div class="field"><label for="aa${i}">What Jordan will do (specific)</label><input type="text" id="aa${i}" data-i="${i}" data-f="what" value="${esc(a.what)}"></div>
+   <div class="field"><label for="aa${i}">What Nadia will do (specific)</label><input type="text" id="aa${i}" data-i="${i}" data-f="what" value="${esc(a.what)}"></div>
    <div class="field"><label for="am${i}">How it will be measured</label><input type="text" id="am${i}" data-i="${i}" data-f="measure" value="${esc(a.measure)}"></div>
    <div class="field"><label for="at${i}">By when</label><input type="text" id="at${i}" data-i="${i}" data-f="when" value="${esc(a.when)}" placeholder="e.g. within 2 weeks"></div>
    <div class="field"><label for="as${i}">Your support as manager</label><input type="text" id="as${i}" data-i="${i}" data-f="support" value="${esc(a.support)}"></div></fieldset>`).join("");
@@ -678,8 +678,8 @@ function dp7(){
   const f=S.fu;
   const LEAD=[["calls","Quality of financing conversations (observed on joint visits)",1],["prescreen","Proposals pre-screened against the financing criteria",1],["crm","CRM updated within 48 hours of each contact",1],["quota","Quarterly quota attainment",0]];
   const ESC=[["e1","If there's no improvement in the agreed actions after support has been given and two reviews held, consult HR about next steps.",1],
-   ["e2","If caring responsibilities or health start to affect Jordan's work further, consult HR about support or adjustments.",1],
-   ["e3","If the Q4 close rate is below 30%, start a formal PIP.",0],["e4","If Jordan misses one check-in, escalate to HR.",0]];
+   ["e2","If caring responsibilities or health start to affect Nadia's work further, consult HR about support or adjustments.",1],
+   ["e3","If the Q4 close rate is below 30%, start a formal PIP.",0],["e4","If Nadia misses one check-in, escalate to HR.",0]];
   main.innerHTML=`<span class="tag">Decision point 7</span>${chip("RE")}
   <h1>Plan the follow-up</h1>
   <fieldset><legend>1. Which leading indicators will you monitor? (choose all that apply)</legend><p class="hint">Leading indicators are behaviours that change quickly. Lagging indicators are results.</p>
@@ -717,7 +717,7 @@ function scoreAll(){
   SORT.forEach(s=>{if(S.sort[s.id]!==s.a)f1.push(`"${s.t}" is best treated as <strong>${s.a}</strong>.`)});
   const gap=(S.plan.gap||"").toLowerCase();
   const hasNum=/\d/.test(gap),persona=/(lazy|disengag|attitude|motivat|careless|not trying)/.test(gap);
-  if(hasNum&&!persona)s1+=2;else f1.push(persona?"Your gap statement includes a judgement about Jordan as a person. Keep it to the measure, trend and standard.":"Your gap statement should include figures, e.g. \"Close rate fell from 33% to 17% over three quarters against a 30% target.\"");
+  if(hasNum&&!persona)s1+=2;else f1.push(persona?"Your gap statement includes a judgement about Nadia as a person. Keep it to the measure, trend and standard.":"Your gap statement should include figures, e.g. \"Close rate fell from 33% to 17% over three quarters against a 30% target.\"");
   if(S.plan.support&&S.plan.support.trim().length>5)s1+=1;else f1.push("Plan the support you could offer before the meeting.");
   out.S1={n:"S1 Preparation (LO1–LO3)",l:lvl(s1,10),fb:f1};
   // S2
@@ -733,7 +733,7 @@ function scoreAll(){
   const max3=1+["c1","c2","c4","c5"].filter(c=>S.causes.has(c)).length;
   const added=/(lazy|disengag|attitude|not motivated|excuse)/.test(t);
   if(added)s3=Math.max(0,s3-1);
-  out.S3={ind:true,n:"S3 Summarise-back (LO4–LO5)",l:lvl(s3,max3),fb:[`Your summary covered: ${hits.length?hits.join(", "):"none of the main points"}.`].concat(added?["It adds an interpretation Jordan didn't give (e.g. \"disengaged\" or \"excuse\")."]:[]).concat(["<em>Model:</em> \"So the new financing criteria mean the smaller clinics you've always worked with are being declined, and you've been using discounts to rescue some deals. You're also behind on CRM and follow-up while you're caring for a family member. Have I got that right?\""]),note:"Automatic check only. In the full course a tutor reviews free text."};
+  out.S3={ind:true,n:"S3 Summarise-back (LO4–LO5)",l:lvl(s3,max3),fb:[`Your summary covered: ${hits.length?hits.join(", "):"none of the main points"}.`].concat(added?["It adds an interpretation Nadia didn't give (e.g. \"disengaged\" or \"excuse\")."]:[]).concat(["<em>Model:</em> \"So the new financing criteria mean the smaller clinics you've always worked with are being declined, and you've been using discounts to rescue some deals. You're also behind on CRM and follow-up while you're caring for a family member. Have I got that right?\""]),note:"Automatic check only. In the full course a tutor reviews free text."};
   // S4
   let s4=0,f4=[];const A=S.actions.filter(a=>a.what);
   A.forEach((a,i)=>{let k=0;if(a.cause&&a.cause!=="gen")k++;else f4.push(`Action ${i+1}: link it to a specific cause you uncovered.`);
@@ -771,22 +771,22 @@ function debrief(){
   <div class="card"><span class="tag">Your PREPARE profile</span><p class="muted" style="margin:.4rem 0">How well you applied each stage. Act, Review and Escalate are judged on your plan, because they happen after the meeting.</p>${prepStrip(prepLevels(r))}</div>
   <div class="card"><span class="tag">2 · What you did well</span><ul class="plain">${best.length?best.map(b=>`<li><span class="found">${icon("check",16)} ${b.dp}</span> ${b.o.fb}</li>`).join(""):"<li>Look at the detailed path below to see which choices helped.</li>"}</ul></div>
   <div class="card"><span class="tag">3 · Your most important improvement</span>${worst?`<p><strong>${worst.dp} · ${worst.crit}.</strong> ${worst.o.fb}</p>${worst.o.better?`<p><em>Try instead:</em> ${esc(worst.o.better)}</p>`:""}`:`<p>No weak choices. Your next step is the free-text work: compare your summary and plan with the models below.</p>`}
-   ${S.guardedLoss?`<p class="hint">Because Jordan became defensive, ${S.guardedLoss} good question${S.guardedLoss>1?"s":""} got a guarded answer and information stayed hidden.</p>`:""}</div>
+   ${S.guardedLoss?`<p class="hint">Because Nadia became defensive, ${S.guardedLoss} good question${S.guardedLoss>1?"s":""} got a guarded answer and information stayed hidden.</p>`:""}</div>
   <div class="card"><span class="tag">4 · What was really going on</span><p>You uncovered <strong>${S.causes.size} of 5</strong> contributing factors.</p><div class="meter" role="img" aria-label="${S.causes.size} of 5 factors found"><span style="width:${S.causes.size*20}%"></span></div>
    <ul class="plain">${Object.entries(CAUSES).map(([k,cz])=>`<li>${S.causes.has(k)?`<span class="found">${icon("check",16)} Found</span>`:`<span class="missed">${icon("cross",16)} Missed</span>`} ${cz.n}${S.causes.has(k)?"":`<br><span class="hint">How to uncover it: ${cz.hint}</span>`}</li>`).join("")}</ul>
-   <p>The financing change was real and affected the whole team, but it only explained part of Jordan's drop. This called for support and recovery, not a formal PIP.</p></div>
+   <p>The financing change was real and affected the whole team, but it only explained part of Nadia's drop. This called for support and recovery, not a formal PIP.</p></div>
   ${selfCheckHTML()}
   <details class="card"><summary>6 · Your full path through the conversation</summary>
    ${S.choices.map(c=>`<div class="fb ${c.o.s===2?"good":c.o.s===1?"ok":"bad"}"><strong>${c.dp} · ${c.crit}:</strong> ${c.o.s===2?"Best":c.o.s===1?"Acceptable":"Problematic"}<br>You said: ${esc(c.o.t.replace(/^Paraphrase: /,""))}<br><span class="muted">${c.o.fb}</span>${c.o.better?`<br><em>Stronger:</em> ${esc(c.o.better)}`:""}</div>`).join("")}</details>
   <details class="card"><summary>7 · Detailed feedback by component</summary>
    ${Object.values(r).map(x=>`<h3>${x.n} ${lab(x)}</h3>${x.fb.length?`<ul>${x.fb.map(f=>`<li>${f}</li>`).join("")}</ul>`:"<p>No issues.</p>"}${x.note?`<p class="hint">${x.note}</p>`:""}`).join("")}
-   <h3>Fairness check</h3><ul><li>Was the standard clear? (30% close rate, stated with evidence)</li><li>Was Jordan genuinely heard?</li><li>Is every decision based on evidence rather than assumption?</li></ul></details>
+   <h3>Fairness check</h3><ul><li>Was the standard clear? (30% close rate, stated with evidence)</li><li>Was Nadia genuinely heard?</li><li>Is every decision based on evidence rather than assumption?</li></ul></details>
   <div class="card"><span class="tag">Reflect</span><div class="field"><label for="refl">What is one thing you'll do differently in a real performance conversation?</label><textarea id="refl"></textarea></div><p class="hint">Your reflection stays on this device.</p><p><a class="btn sec" href="downloads/PREPARE-job-aid-pack.pdf" target="_blank" rel="noopener">Download the PREPARE job aid pack (PDF)</a></p><p class="hint">Includes the PREPARE job aid, the conversation planner and three checklists, for use with your own team.</p></div>
   <div class="row"><button class="btn" id="retryConv">Try the conversation again</button><button class="btn sec" id="print">Print or save as PDF</button><button class="btn sec" id="again">Start again from the beginning</button></div>`;
   wireSelfCheck();
   $("#print").onclick=()=>{try{window.print()}catch(e){}};
   $("#again").onclick=()=>{try{localStorage.removeItem("jordanSim")}catch(e){}location.reload()};
-  $("#retryConv").onclick=()=>{S.lastPlayed=0;S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";S.guardedLoss=0;S.repairs=0;S.node="open";S.log=[{w:"note",t:"Second attempt. Jordan arrives and sits down."}];go(3)};
+  $("#retryConv").onclick=()=>{S.lastPlayed=0;S.choices=[];S.causes=new Set();S.summary="";S.actions=[];S.fu={};S.mood="neutral";S.guardedLoss=0;S.repairs=0;S.node="open";S.log=[{w:"note",t:"Second attempt. Nadia arrives and sits down."}];go(3)};
   say("Debrief ready.");
 }
 
@@ -804,10 +804,10 @@ function prepLevels(r){
 }
 function modelSummary(){const b=["So the new financing partner has stricter criteria"];if(S.causes.has("c1"))b.push("and the smaller clinics you've always worked with are being declined because pre-screening hasn't changed");if(S.causes.has("c2"))b.push("and you've been using bigger discounts to rescue some deals");let t=b.join(", ")+".";if(S.causes.has("c3"))t+=" You're not confident talking clinics through the alternative financing options.";if(S.causes.has("c4"))t+=" You're also behind on CRM and follow-up"+(S.causes.has("c5")?" while you're caring for a family member at home.":".");return t+" Have I got that right?"}
 function selfChecks(){
-  const P=[["A figure and a trend (e.g. 33% → 17%)"],["The standard it is compared with (30% target)"],["No judgement about Jordan as a person (e.g. \"disengaged\")"],["Open questions, not leading ones"],["Support I could offer"]];
-  const Sm=[["Only what Jordan actually said, nothing added"],["The financing criteria and the smaller clinics"]];
+  const P=[["A figure and a trend (e.g. 33% → 17%)"],["The standard it is compared with (30% target)"],["No judgement about Nadia as a person (e.g. \"disengaged\")"],["Open questions, not leading ones"],["Support I could offer"]];
+  const Sm=[["Only what Nadia actually said, nothing added"],["The financing criteria and the smaller clinics"]];
   if(S.causes.has("c2"))Sm.push(["The discounting"]);if(S.causes.has("c4"))Sm.push(["The CRM and follow-up delays"]);if(S.causes.has("c5"))Sm.push(["The caring situation, acknowledged respectfully"]);Sm.push(["A check at the end (\"Have I got that right?\")"]);
-  const A=[["Each action is linked to a cause I found"],["Each action has a measure with a number"],["Each action has a realistic timescale"],["I said what I will do to support Jordan"],["Nothing promised outside my authority (targets, leave)"]];
+  const A=[["Each action is linked to a cause I found"],["Each action has a measure with a number"],["Each action has a realistic timescale"],["I said what I will do to support Nadia"],["Nothing promised outside my authority (targets, leave)"]];
   if(S.causes.has("c5"))A.push(["I planned to seek HR guidance on support for the caring situation"]);
   return [
    {id:"p",t:"Conversation plan (S1)",mine:`<strong>Gap:</strong> ${esc(S.plan.gap)}<br><strong>Opening:</strong> ${esc(S.plan.opening)}<br><strong>Questions:</strong> ${esc(S.plan.questions)}<br><strong>Support:</strong> ${esc(S.plan.support)}`,
